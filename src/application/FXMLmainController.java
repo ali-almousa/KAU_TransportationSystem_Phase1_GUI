@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.Frame;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -8,17 +9,22 @@ import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.control.TextArea;
 
 public class FXMLmainController  implements Initializable{
@@ -161,9 +167,63 @@ public class FXMLmainController  implements Initializable{
 	
 	@FXML
 	public void start(ActionEvent ae) {
+		
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setTitle("Error Message");
+		alert.setHeaderText(null);
 		System.out.println("crjknf");
-		int KAUdays = Integer.parseInt(NumberOfDays.getText());
-		int KAUbusses = Integer.parseInt(NumberOfBusses.getText());
+		int KAUdays;
+		try {
+			if(!isNumeric(NumberOfDays.getText())) {
+				throw new InputMismatchException();
+			}
+			if(isNumeric(NumberOfDays.getText()) && Integer.parseInt(NumberOfDays.getText()) <= 0) {
+				throw new BusNumberException(Integer.parseInt(NumberOfDays.getText()));
+			}
+			 
+			KAUdays = Integer.parseInt(NumberOfDays.getText());
+		}catch(InputMismatchException e){
+			alert.setContentText(String.format("'%s' %s", NumberOfDays.getText(),  "Not a valid input for the number of days. the default value is set {1 day}"));
+			alert.showAndWait();
+			KAUdays = 1;
+		}catch(BusNumberException e){
+			alert.setContentText(String.format("'%s' %s", NumberOfDays.getText(),  "Not a valid input for the number of days. the default value is set {1 day}"));
+			alert.showAndWait();
+			KAUdays = 1;
+		}catch(Exception e){
+			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
+			KAUdays = 1;
+		}
+		
+		
+		int KAUbusses;
+		try {
+			if(!isNumeric(NumberOfBusses.getText())) {
+				throw new InputMismatchException();
+			}
+			if(isNumeric(NumberOfBusses.getText()) && Integer.parseInt(NumberOfBusses.getText()) <= 0) {
+				throw new BusNumberException(Integer.parseInt(NumberOfBusses.getText()));
+			}
+			 
+			KAUbusses = Integer.parseInt(NumberOfBusses.getText());
+		}catch(InputMismatchException e){
+			alert.setContentText(String.format("'%s' %s", NumberOfBusses.getText(),  "Not a valid input for the number of busses. the default value is set {2 busses}"));
+			alert.showAndWait();
+			KAUbusses = 2;
+		}catch(BusNumberException e){
+			alert.setContentText(String.format("'%s' %s", NumberOfBusses.getText(),  "Not a valid number for the number of busses. the default value is set {2 busses}"));
+			alert.showAndWait();
+			KAUbusses = 2;
+		}catch(Exception e){
+			System.out.println("Not a valid input for the number of busses. the default value is set {2 busses}");
+			KAUbusses = 2;
+		}
+		
+		
+		
+		
+		
 		String KAUstudents = NumberOfStudents.getText();
 
 		
@@ -173,6 +233,15 @@ public class FXMLmainController  implements Initializable{
 		   n1[n] = Integer.parseInt(parts[n]);
 		}
 		
+		try {
+			if(n1.length != KAUdays) {
+				throw new Exception();
+			}
+		}catch(Exception e){
+			alert.setContentText(String.format("'%s' %s", NumberOfStudents.getText(),  "the length of the array of the number of students doesn't match the number of days!"));
+			alert.showAndWait();
+			System.exit(1);
+		}
 		
 		ArrayList<Object> report = GUI(KAUdays, KAUbusses, n1);
 		ArrayList<ArrayList<Flight>> flightReport = (ArrayList<ArrayList<Flight>>)report.get(0);
@@ -346,7 +415,9 @@ public class FXMLmainController  implements Initializable{
 
 }
 	
-	
+    public static boolean isNumeric(String str) {
+        return str != null && str.matches("[-+]?\\d*\\.?\\d+");
+    }
 	
 	public static ArrayList<Object> GUI(int KAUdays, int KAUbus, int[] KAUstudent) {
 		// report lists
@@ -370,9 +441,15 @@ public class FXMLmainController  implements Initializable{
 		int testDays;
 		//Exception handling
 		try {
+//			if(!isNumeric(testDays) || Integer.parseInt(testDays) <= 0) {
+//				
+//			}
 			testDays = KAUdays;
 		}catch(InputMismatchException e){
-//			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
+			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
+			testDays = 1;
+		}catch(Exception e){
+			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
 			testDays = 1;
 		}
 		
