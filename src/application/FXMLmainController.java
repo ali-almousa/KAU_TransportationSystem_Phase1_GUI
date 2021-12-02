@@ -293,7 +293,7 @@ public class FXMLmainController  implements Initializable{
                 comprehensiveReport+=String.format("			%d", currentFlight.studentsInTrip.size() - currentFlight.getCatches());
                 comprehensiveReport+=String.format("		  %s", currentFlight.getCatchesPer());
                 comprehensiveReport+=String.format("	        %s", currentFlight.getTypeOfFilght());
-                comprehensiveReport+=String.format("		%s\n", currentFlight.getBusUsed().getID());
+                comprehensiveReport+=String.format("		%s", currentFlight.getBusUsed().getID());
                 comprehensiveReport+=String.format("%n%s%n",minus(142));
 //        		+++++++++++++++++++++++++++Flights Information+++++++++++++++++++++++++++++++++++++
                 
