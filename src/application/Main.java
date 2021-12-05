@@ -12,13 +12,17 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("FXMLmain.fxml"));
-			Scene scene = new Scene(root);
+			Scene scene = new Scene(root,1450,960);
+//			Scene scene = new Scene(root,1920,960);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
 			
-			primaryStage.setMinHeight(1800);
-			primaryStage.setMinWidth(1800);
-			primaryStage.setResizable(true);
+			primaryStage.setResizable(false);
+			primaryStage.centerOnScreen();
+			primaryStage.setMinWidth(1490);
+			primaryStage.setMinHeight(960);
+			primaryStage.setMaxWidth(1490);
+			primaryStage.setMaxHeight(910);
 			
 			primaryStage.setTitle("KAU Transportation System");
 			primaryStage.setScene(scene);

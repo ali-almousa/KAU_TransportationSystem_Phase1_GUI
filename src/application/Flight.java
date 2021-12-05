@@ -1,3 +1,8 @@
+/**
+ * @author Azeez + Ahmed
+ *
+ *
+ */
 package application;
 import java.util.ArrayList;
 
@@ -95,13 +100,16 @@ public abstract class Flight {
 			if(S.isCatch) c++;
 		}
 		int misses = numS - c;
+
 //		String perC = 100*((double)(c) / (c+misses)) + "%";
 		String perCC = String.format("%.2f", 100*((double)(c) / (c+misses))) + "%";
 //		return "Flight: " + " " + numFlight + " " + TimeDep + " " + TimeArr + " " + numS + " " + c  + " " + misses + " " + perCC + " " + isFull + " " + type;
-		return "Flight: " + "numFlight: " + numFlight + " " +  "TimeDep: " +TimeDep + " " +
-		"TimeArr: " +TimeArr + " " +  "numS: " +numS + " " +
-		"catch: " +c  + " " +  "misses: " +misses + " " +
-		"perCC: " +perCC + " " +  "isFull: " +isFull + " " +  "type: " +type;
-
+//		return "Flight: " + "numFlight: " + numFlight + " " +  "TimeDep: " +TimeDep + " " +
+//		"TimeArr: " +TimeArr + " " +  "numS: " +numS + " " +
+//		"catch: " +c  + " " +  "misses: " +misses + " " +
+//		"perCC: " +perCC + " " +  "isFull: " +isFull + " " +  "type: " +type;
+		String a = String.format("Students: %d\t Moved At: %s\t\t Arrived At: %s\t Catches: %d\t Misses: %d\t\t Catch%%: %s\t Flight Type: %s\t BusId: %d\t", 
+				numS, TimeDep, TimeArr, c, misses, perCC, type, busUsed.getID());
+		return a;
 	}
 }

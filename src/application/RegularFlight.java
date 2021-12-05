@@ -1,6 +1,10 @@
 package application;
 import java.util.ArrayList;
 
+/**
+ * @author Azeez + Ahmed
+ *
+ */
 public class RegularFlight extends Flight {
 	
 	

@@ -1,8 +1,13 @@
+
 package application;
 
 import java.util.Arrays;
 
 //
+/**
+ * @author Ali
+ *
+ */
 class Queue
 {
     public Bus[] arr;      // array to store queue elements

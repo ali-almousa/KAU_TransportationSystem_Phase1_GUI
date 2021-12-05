@@ -1,4 +1,9 @@
+
 package application;
+/**
+ * @author azeez + ahmed
+ *
+ */
 public class Student implements Comparable<Student>, Cloneable{
 	
 	//Variables of student
@@ -113,9 +118,9 @@ public class Student implements Comparable<Student>, Cloneable{
 		String ST = Time.MinutesToTime(this.getShowupTime());
 		String IAT =  Time.MinutesToTime(this.getIntendedArrivalTime());
 		boolean c = this.isCatch;
-		
-		return  "ID: " + ID + " " +  "hasE: " + hasE + " " +  "ST: " + 
-		ST + " " +  "IAT: " + IAT + " " +  "catch: " + c;
+		String a = String.format("ID: %s\tHas Exam: %s\tshowup Time: %s\tIntended Arrival Time: %s\tCatch: %s", 
+                    ID, hasE, ST, IAT, c);
+		return a;
 		
 
 	}

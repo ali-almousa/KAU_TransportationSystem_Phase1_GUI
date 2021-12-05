@@ -1,8 +1,13 @@
+
 package application;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ali
+ *
+ */
 public class Bus implements Cloneable{
 	private int numberTrips;
 	private double distanceKm;
@@ -242,7 +247,7 @@ public class Bus implements Cloneable{
 		this.avalAt = avalAt;
 	}
 
-	public void sendBus(int days, ArrayList<Student> tempStudents, ArrayList<ArrayList<Flight>> flightReport) {
+	public void sendBus(int days, ArrayList<Student> tempStudents, ArrayList<ArrayList<Flight>> flightReport, ArrayList<Student> studentsALl, ArrayList<Flight> flightsAll) {
 		//create a new flight to be launched and add it to tripsArray
 		Flight currentFlight = new RegularFlight();
 		//set the busUsed attribute of the current flight
@@ -277,6 +282,7 @@ public class Bus implements Cloneable{
 			student.setIsCatch(this.getCampusArrival() <= student.getIntendedArrivalTime());
 			if (this.getCampusArrival() <= student.getIntendedArrivalTime()) currentFlight.incCatches();
 			tempStudents.add(student);
+			studentsALl.add(student);
 			this.getStudentsDelivered().add(student);
 			currentFlight.studentsInTrip.add(student);
 		}
@@ -286,6 +292,7 @@ public class Bus implements Cloneable{
 		int misses = currentFlight.studentsInTrip.size() - currentFlight.getCatches();
 		String perCC = String.format("%.2f", 100*((double)(catches) / (catches+misses))) + "%";
 		currentFlight.setCatchesPer(perCC);
+		flightsAll.add(currentFlight);
 		flightReport.get(days - 1).add(currentFlight);
 		
 //		System.out.println("Bus ID: " + this.ID);

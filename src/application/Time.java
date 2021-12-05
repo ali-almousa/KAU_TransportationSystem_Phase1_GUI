@@ -1,6 +1,10 @@
 package application;
 // convention: everything is in minutes with 6:00Am as
 // the starting reference an 10:00Pm as the last reference
+/**
+ * @author Azeez + Ali + ahmed
+ *
+ */
 public class Time {
 	public static int clock;
 	public int minutesElapsed;
