@@ -90,12 +90,12 @@
       <Button contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" onAction="#Katchup">
          <graphic>
             <ImageView fx:id="Katchup" fitHeight="144.0" fitWidth="176.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="file:/C:/Users/alooo/eclipse-workspace/KAU_TransportationSystem_Phase1_GUI/src/application/KATCHUP.png" />
-               </image>
                <effect>
                   <Blend />
                </effect>
+               <image>
+                  <Image url="@KATCHUP.png" />
+               </image>
             </ImageView>
          </graphic>
          <font>
