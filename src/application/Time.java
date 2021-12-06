@@ -2,16 +2,19 @@ package application;
 // convention: everything is in minutes with 6:00Am as
 // the starting reference an 10:00Pm as the last reference
 /**
- * @author Azeez + Ali + ahmed
+ * @author Azeez + Ali + Ahmed
  *
  */
+
 public class Time {
-	public static int clock;
-	public int minutesElapsed;
-	public int startingHour;
-	public int endingHour;
 	
+	//-----------------Time Variables-------------------
+	public static int clock;   // Used as a global clock
+	public int minutesElapsed; // Minutes passed according to global clock
+	public int startingHour;   // Start of working hours
+	public int endingHour;     // End of working hours
 	
+	//----------------Time Constructors-----------------
 	public Time() {
 		this.setMinutesElapsed(0);
 		this.setStartingHour(0);
@@ -26,89 +29,82 @@ public class Time {
 		Time.clock = this.getStartingHour();
 	}
 	
-	/**
-	 * @return the minutesElapsed
-	 */
+	//--------------Setters & Getters-------------------
 	public int getMinutesElapsed() {
 		return minutesElapsed;
 	}
 
-	/**
-	 * @param minutesElapsed the minutesElapsed to set
-	 */
 	public void setMinutesElapsed(int minutesElapsed) {
 		this.minutesElapsed = minutesElapsed;
 	}
 
-	/**
-	 * @return the startingHour
-	 */
 	public int getStartingHour() {
 		return startingHour;
 	}
 
-	/**
-	 * @param startingHour the startingHour to set
-	 */
 	public void setStartingHour(int startingHour) {
 		this.startingHour = startingHour;
 	}
 
-	/**
-	 * @return the endingHour
-	 */
 	public int getEndingHour() {
 		return endingHour;
 	}
 
-	/**
-	 * @param endingHour the endingHour to set
-	 */
 	public void setEndingHour(int endingHour) {
+
 		this.endingHour = endingHour;
 	}
 	
+	// Static setter for the global clock given minutes as parameter
+	public static void setClock(int mins) {
+			Time.clock = mins;
+	}
+	
+	//-------------------Methods------------------------
+	
+	// Increment global clock by 1 minute
 	public static void incrementClock() {
 		Time.clock++;
 	}
-
+	
+	// Increment global clock by given minutes elapsed
 	public static void incrementClock(int mins) {
 		Time.clock = Time.clock + mins;
 	}
 	
+	// Reset the global clock to Starting Hour
 	public void resetTime() {
-//		this.setMinutesElapsed(0);
 		Time.clock = this.getStartingHour();
 	}
 	
+	// Convert the value of minutes elapsed of this object to a proper time representation (HH:MM AM/PM)
 	public String MinutesToTime() {
-		
 		String amPm = "AM";
-		int hours = (this.getMinutesElapsed() / 60)  + 6;
-		int minutes = this.getMinutesElapsed() % 60;
+		int hours = (this.getMinutesElapsed() / 60)  + 6; // represent minutes in terms of hours
+		int minutes = this.getMinutesElapsed() % 60;	  // add reminding minutes
+		// check whether AM or PM
 		if (hours > 12) {
 			hours -= 12;
 			amPm = amPm.replace('A', 'P');
 		}
+		// create a string representation of proper time display
 		String time = String.format("%d:%02d %s", hours, minutes, amPm);
 		return time;
 	}
 		
+	// Convert the value of minutes GIVEN to a proper time representation (HH:MM AM/PM)
 	public static String MinutesToTime(int mins) {
-			
 		String amPm = "AM";
-		int hours = (mins / 60)  + 6;
-		int minutes = mins % 60;
+		int hours = (mins / 60)  + 6; // represent minutes in terms of hours
+		int minutes = mins % 60;	  // add reminding minutes
+		// check whether AM or PM
 		if (hours > 12) {
 			hours -= 12;
 			amPm = amPm.replace('A', 'P');
 		}
-
+		// create a string representation of proper time display
 		String time = String.format("%d:%02d %s", hours, minutes, amPm);
 		return time;
 	}
 		
-	public static void setClock(int mins) {
-			Time.clock = mins;
-		}
 }

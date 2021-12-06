@@ -2,22 +2,23 @@ package application;
 import java.util.ArrayList;
 
 /**
- * @author Azeez + Ahmed
+ * @author Azeez + Ahmed + Turki
  *
  */
 public class RegularFlight extends Flight {
 	
+	//--------------------RegularFlight Variables----------------------
+	public static final double DISTANCE_TO_KAU = 18.2; // distance in KM to campus from dorms
+	public static final int MINUTES_TO_KAU = 30;	   // Time in minutes to campus from dorms
+	public static final int FUEL_TO_KAU = 10;		   // Fuel required to get from campus to dorms
 	
-	
-	public static final double DISTANCE_TO_KAU = 18.2;
-	public static final int MINUTES_TO_KAU = 30;
-	public static final int FUEL_TO_KAU = 10;
-	
+	//--------------------RegularFlight Constructors-------------------
 	public RegularFlight() {
 		setTypeOfFilght("Regular Flight");
 		Flight.incNumFlights();
 	}
 	
+	//--------------Setters & Getters-------------------
 	public ArrayList<Student> getStudentsInTrip() {
 		return studentsInTrip;
 	}
@@ -25,7 +26,6 @@ public class RegularFlight extends Flight {
 	public void setStudentsInTrip(ArrayList<Student> studentsInTrip) {
 		this.studentsInTrip = studentsInTrip;
 	}
-	
 	
 	@Override
 	public double getDISTANCE_TO_KAU() {
@@ -57,6 +57,5 @@ public class RegularFlight extends Flight {
 	public void setTimeOfArrival(int timeOfArrival) {
 		this.timeOfArrival = timeOfArrival;
 	}
-
 
 }

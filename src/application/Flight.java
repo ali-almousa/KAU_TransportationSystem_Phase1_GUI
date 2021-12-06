@@ -1,5 +1,5 @@
 /**
- * @author Azeez + Ahmed
+ * @author Azeez + Ahmed 
  *
  *
  */
@@ -7,44 +7,31 @@ package application;
 import java.util.ArrayList;
 
 public abstract class Flight {
-	public static int numFlights;
-	public String typeOfFilght;
-	public int timeOfDeparture;
-	public int timeOfArrival;
-	public Bus busUsed;
-	public int catches;
-	public String catchesPer;
 	
-	ArrayList<Student> studentsInTrip = new ArrayList<Student>();
+	//--------------------Flight Variables----------------------
+	public static int numFlights; // Number of flights
+	public String typeOfFilght;	  // Type of flight (Phase2)
+	public int timeOfDeparture;   // Time of flight departure
+	public int timeOfArrival;	  // Time of flight arrival
+	public Bus busUsed;			  // Object of bus being used
+	public int catches;			  // Number of students caught their lecture in flight
+	public String catchesPer;     // Percentage of students caught their lecture in flight
+	ArrayList<Student> studentsInTrip = new ArrayList<Student>(); // Array of students in flight
 	
-	// Setters & Getters
-
-	public abstract int getTimeOfDeparture();
+	//--------------Setters & Getters-------------------
 	
-	/**
-	 * @return the catches
-	 */
 	public int getCatches() {
 		return catches;
 	}
 
-	/**
-	 * @param catches the catches to set
-	 */
 	public void incCatches() {
 		this.catches++;
 	}
 
-	/**
-	 * @return the catchesPer
-	 */
 	public String getCatchesPer() {
 		return catchesPer;
 	}
 
-	/**
-	 * @param catchesPer the catchesPer to set
-	 */
 	public void setCatchesPer(String catchesPer) {
 		this.catchesPer = catchesPer;
 	}
@@ -64,13 +51,7 @@ public abstract class Flight {
 	public static void incNumFlights() {
 		Flight.numFlights++;
 	}
-
-	public abstract void setTimeOfDeparture(int timeOfDeparture);
 	
-	public abstract int getTimeOfArrival();
-	
-	public abstract void setTimeOfArrival(int timeOfArrival);
-
 	public String getTypeOfFilght() {
 		return typeOfFilght;
 	}
@@ -79,35 +60,47 @@ public abstract class Flight {
 		this.typeOfFilght = typeOfFilght; 
 	};
 	
+	// Abstract Setters & Getters
+	public abstract int getTimeOfDeparture();
+	
+	public abstract void setTimeOfDeparture(int timeOfDeparture);
+	
+	public abstract int getTimeOfArrival();
+	
+	public abstract void setTimeOfArrival(int timeOfArrival);
+
 	public abstract double getDISTANCE_TO_KAU();
 
 	public abstract int getMINUTES_TO_KAU();
 	
 	public abstract int getFUEL_TO_KAU();
 	
+	//-------------------Methods------------------------
+	
+	// Print flight information
 	public String toString() {
+		// get the flight number
 		int numFlight = Flight.getNumFlights();
+		// get the time of departure and arrival of the flight
 		String TimeDep = Time.MinutesToTime(this.getTimeOfDeparture());
 		String TimeArr = Time.MinutesToTime(this.getTimeOfArrival());
 		
+		// get the type of flight
 		String type = this.getTypeOfFilght();
+		// get number of students in the flight
 		int numS = this.studentsInTrip.size();
-		boolean isFull = numS==10;
-				
-				
+		boolean isFull = numS==10; // check if flight is at max capacity
+		
+		// loop for getting catch state
 		int c = 0;
 		for(Student S : this.studentsInTrip) {
 			if(S.isCatch) c++;
 		}
+		// number of students missed the lecture (reminder of people didn't catch of total) 
 		int misses = numS - c;
-
-//		String perC = 100*((double)(c) / (c+misses)) + "%";
+		// percentage of student caught their lecture
 		String perCC = String.format("%.2f", 100*((double)(c) / (c+misses))) + "%";
-//		return "Flight: " + " " + numFlight + " " + TimeDep + " " + TimeArr + " " + numS + " " + c  + " " + misses + " " + perCC + " " + isFull + " " + type;
-//		return "Flight: " + "numFlight: " + numFlight + " " +  "TimeDep: " +TimeDep + " " +
-//		"TimeArr: " +TimeArr + " " +  "numS: " +numS + " " +
-//		"catch: " +c  + " " +  "misses: " +misses + " " +
-//		"perCC: " +perCC + " " +  "isFull: " +isFull + " " +  "type: " +type;
+		// All data of flight
 		String a = String.format("Students: %d\t Moved At: %s\t\t Arrived At: %s\t Catches: %d\t Misses: %d\t\t Catch%%: %s\t Flight Type: %s\t BusId: %d\t", 
 				numS, TimeDep, TimeArr, c, misses, perCC, type, busUsed.getID());
 		return a;

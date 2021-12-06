@@ -43,6 +43,7 @@ import javafx.stage.StageStyle;
 import javafx.scene.control.TextArea;
 
 public class FXMLmainController  implements Initializable{
+	//lists to save data for reports
 	public static ArrayList<Student> studentsAll = new ArrayList<>();
 	public static ArrayList<Flight> flightsAll = new ArrayList<>();
 	public static int flightNumber;
@@ -90,9 +91,10 @@ public class FXMLmainController  implements Initializable{
 	private Button ButtonSearchIDButton3;
 	@FXML
 	private TextArea SearchIDReport;
-	
 	//-----------------------------------------------
 	//Flight pop Up
+	@FXML
+	private TextField DayNumberTextField;
 	@FXML
 	private TextField FlightNumberTextField;
 	@FXML
@@ -105,25 +107,24 @@ public class FXMLmainController  implements Initializable{
 	//-----------------------------------------------
 	//Day Summary pop Up
 	@FXML
+	private TextField DayNumberTextField2;
+	@FXML
 	private Button SummaryDayButton;
 	//Inside Day Summary Window
+	@FXML
+	private Button SearchDayButton;
 	@FXML
 	private TextArea DaySummaryReport;
 	@FXML
 	private Button CloseDaySummaryButton;
 	//-----------------------------------------------
-	@FXML
-	private ImageView KatchupImage;
-
+	//Secret Bouns
 	@FXML
 	private ImageView Katchup;
-	@FXML
-	private TextField DayNumberTextField;
-	@FXML
-	private TextField DayNumberTextField2;
-	@FXML
-	private Button SearchDayButton;
-	
+
+
+
+	//Display the summary of the given day
 	@FXML
 	public void dayNumberSearch(ActionEvent e) throws IOException{
 		int dayNum = Integer.parseInt(DayNumberTextField2.getText()) - 1;
@@ -131,12 +132,12 @@ public class FXMLmainController  implements Initializable{
 		
 
 		
-		//Total catches
 		int catches = 0;
 		int totalStudetnsDelivered = 0;
 		double totalDistance = 0;
 		double totalFuel = 0;
 		int ID = -1;
+		// loop to save data of the flights in the given day
 		for(int i = 0; i < flights.size(); i++) {
 			if (ID != flights.get(i).busUsed.getID()) {
 				totalFuel+= flights.get(i).busUsed.getFuelConsumption();
@@ -165,26 +166,12 @@ public class FXMLmainController  implements Initializable{
 
 		
 	}
-	
+	//Animation Bonus
 	@FXML
 	public void Katchup(ActionEvent e) throws IOException{
 
-//			Katchup.setOpacity(0.2);
-//			Stage stage;
-//			Parent root;
-//			
-//			stage = new Stage();
-//			root = FXMLLoader.load(getClass().getResource("FXMLketchup.fxml"));
-//			stage.setScene(new Scene(root));	
-//			stage.initModality(Modality.APPLICATION_MODAL);
-//			stage.initOwner(SearchIDButton.getScene().getWindow());
-//			stage.showAndWait();
-
 			TranslateTransition translate = new TranslateTransition();
 			translate.setNode (Katchup);
-//			translate.setDuration(Duration.millis(1000));
-//			translate.setCycleCount(TranslateTransition.INDEFINITE);
-//			translate.setByY(70);
 			translate.setByX(670);
 			translate.setByY(400);
 
@@ -194,8 +181,6 @@ public class FXMLmainController  implements Initializable{
 			// rotate
 			RotateTransition rotate = new RotateTransition();
 			rotate.setNode(Katchup);
-//			rotate.setDuration(Duration.millis(1000));
-//			rotate.setcycleCount(TranslateTransition.INDEFINITE);|
 			rotate.setInterpolator (Interpolator.LINEAR);
 			rotate.setByAngle(360);
 			rotate.play();
@@ -203,8 +188,6 @@ public class FXMLmainController  implements Initializable{
 			// fade
 			FadeTransition fade = new FadeTransition();
 			fade.setNode (Katchup);
-//			fade.setDuration(Duration.millis(1000));
-//			fade.setcycleCount(TranslateTransition.INDEFINITE);
 			fade.setInterpolator(Interpolator.LINEAR);
 			fade.setFromValue(0);
 			fade.setToValue(1);
@@ -213,8 +196,6 @@ public class FXMLmainController  implements Initializable{
 			// scale
 			ScaleTransition scale =  new ScaleTransition();
 			scale.setNode(Katchup);
-//			scale.setDuration(Duration.millis(1000));
-//			scale.setCycleCount(TranslateTransition.INDEFINITE);
 			scale.setInterpolator(Interpolator.LINEAR);
 			scale.setByX(1.2);
 			scale.setAutoReverse(true);
@@ -222,27 +203,17 @@ public class FXMLmainController  implements Initializable{
 			
 		
 	}
-	
+	//Display the summary of the flight in the given day
 	@FXML
 	public void flightNumberSearch(ActionEvent e) throws IOException{
 		int flightNum = Integer.parseInt(FlightNumberTextField.getText());
 		int dayNum = Integer.parseInt(DayNumberTextField.getText());
 		
 		FlightSummaryReport.setText("Flight Number: " + flightNum + "     " + FXMLmainController.flightReportP1.get(dayNum - 1).get(flightNum - 1).toString());
-		FlightSummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 2em;");
-//		FlightSummaryReport.setStyle("-fx-font-size: 2em;");
-		
-		
-//		for(int i = 0; i < FXMLmainController.flightsAll.size(); i++) {
-//			if(i == Integer.parseInt(flightNum) - 1) {
-//				FlightSummaryReport.setText("Flight Number: " + (i + 1) + "     " +FXMLmainController.flightsAll.get(i).toString());
-//				FlightSummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 2em;");
-////				FlightSummaryReport.setStyle("-fx-font-size: 2em;");
-//			}
-//		}
+		FlightSummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 1.3em;");
 		
 	}
-	
+	//Display the window for the summary of the flight in the given day
 	@FXML
 	public void flightNumberButton(ActionEvent e) throws IOException{
 
@@ -261,7 +232,7 @@ public class FXMLmainController  implements Initializable{
 
 		
 	}
-	
+	//closing windows
 	@FXML
 	public void close(ActionEvent e) throws IOException{
 		Stage stage;
@@ -273,22 +244,19 @@ public class FXMLmainController  implements Initializable{
 		}
 		
 	}
-	
-	//Search ID PopUp window
-		@FXML
-		public void SearchIDButton(ActionEvent e) throws IOException{
-			String ID = SearchIDTextField2.getText();
+	//Display the student with the given ID
+	@FXML
+	public void SearchIDButton(ActionEvent e) throws IOException{
+		String ID = SearchIDTextField2.getText();
 
-			for(Student S : studentsAll) {
-				if(S.getID() == Integer.parseInt(ID)) {
-					SearchIDReport.setText(S.toString());
-					SearchIDReport.setStyle("-fx-font-size: 1.3em; -fx-text-fill: red ;");
-				}
-			}		
-		}
-	
-	
-	//Search ID PopUp window
+		for(Student S : studentsAll) {
+			if(S.getID() == Integer.parseInt(ID)) {
+				SearchIDReport.setText(S.toString());
+				SearchIDReport.setStyle("-fx-font-size: 1.3em; -fx-text-fill: red ;");
+			}
+		}		
+	}
+	//Display the Search ID PopUp window
 	@FXML
 	public void SearchIDButtonPopUp(ActionEvent e) throws IOException{
 		Stage stage;
@@ -331,7 +299,7 @@ public class FXMLmainController  implements Initializable{
 		
 		
 	}
-	//Flight Summary PopUp window
+	//Display the Flight Summary PopUp window
 	@FXML
 	public void FlightButtonPopUp(ActionEvent e) throws IOException{
 		
@@ -351,8 +319,7 @@ public class FXMLmainController  implements Initializable{
 			}
 		
 	}
-	
-	//Summary Day PopUp window
+	//Display the Summary Day PopUp window
 	@FXML
 	public void SummaryDayButtonPopUp(ActionEvent e) throws IOException{
 		
@@ -373,7 +340,7 @@ public class FXMLmainController  implements Initializable{
 		
 		
 	}
-	//Exprting Phase1
+	//Exporting Phase1
 	@FXML
 	public void ExportPhase1(ActionEvent e) throws IOException, FileNotFoundException{
 		File file = new File("ReportOfPhase1.txt");
@@ -389,14 +356,15 @@ public class FXMLmainController  implements Initializable{
 		alert.setContentText(String.format("%s", "Phase1 report exported successfully to 'ReportOfPhase1.txt' in the same directory!"));
 		alert.showAndWait();
 	}
+	//Exporting Phase2
 	@FXML
 	public void ExportPhase2(ActionEvent e) throws IOException{
 		
 		
 	}
 	
-	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-	
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$STRAT RUNNING THE MAIN LOOP$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	//start running the GUI
 	@FXML
 	public void start(ActionEvent ae) {
 		
@@ -598,8 +566,7 @@ public class FXMLmainController  implements Initializable{
         TotalSummaryPhase1.setText(summaryReportP1);
 		
 	}
-	
-	
+	//print *
 	public static String star(int a){
         String star="";
         for(int i=0;i<a;i++){
@@ -607,7 +574,7 @@ public class FXMLmainController  implements Initializable{
         }
         return star;
     }
-    
+	//print -
     public static String minus(int a){
         String star="";
         for(int i=0;i<a;i++){
@@ -615,8 +582,7 @@ public class FXMLmainController  implements Initializable{
         }
         return star;
     }
-    
-    
+    //update availability of busses according to current clock
 	public static void updateAval(int testBusses, Queue busses) {
 		//update availability after incrementing the clock
 		for(int i = 0; i < testBusses; i++) {
@@ -626,7 +592,7 @@ public class FXMLmainController  implements Initializable{
 			busses.enqueue(currentBus);
 		}
 	}
-	
+	//generate random students
 	public static ArrayList<Student> generateRandomStudents(int days, int[] KAUStudent) {
 		Scanner input = new Scanner(System.in);
 //		System.out.println("Number of students in day#" + days);
@@ -639,7 +605,7 @@ public class FXMLmainController  implements Initializable{
 		
 		return students;
 	}
-	
+	//update the scheduled departure time of the busses if it's time to move & no student in the bus 
 	public static void noStudentsAndTimeToMove(Bus bus, Queue busses) {
 		if (bus.getCapacity() == 10 && bus.getScheduledDormDeparture() == Time.clock) {
             //update the scheduled dormDeparture to the current scheduled bus departure time + 30
@@ -654,11 +620,11 @@ public class FXMLmainController  implements Initializable{
 	}
 
 }
-	
+	//check if the string is numerical
     public static boolean isNumeric(String str) {
         return str != null && str.matches("[-+]?\\d*\\.?\\d+");
     }
-	
+	//main drive of the project (main loop)
 	public static ArrayList<Object> GUI(int KAUdays, int KAUbus, int[] KAUstudent) {
 		// report lists
 		double[] totalSummary = new double[7];
@@ -881,8 +847,7 @@ public class FXMLmainController  implements Initializable{
 		return result;
 		
 	}
-	
-	
+	//running code before starting the GUI
 		@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub

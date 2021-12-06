@@ -6,20 +6,19 @@ package application;
  */
 public class Student implements Comparable<Student>, Cloneable{
 	
-	//Variables of student
-	int id;				
-	boolean hasExam;	
-	boolean isCatch;
-	int intendedArrivalTime;
-	int showupTime;	
+	//--------------------Student Variables----------------------
+	int id;					// Represent ID of the student			
+	boolean hasExam;		// Represent if the student has an exam
+	boolean isCatch;		// Represent if the student caught the lecture on time
+	int intendedArrivalTime;// Represent the Intended time of arriving to uni.
+	int showupTime;			// Represent the time student showed up at bus station
 	
-	//Constructors
+	//--------------------Student Constructors-------------------
 	public Student() {
 		this.setID(randomID());
 		this.setHasExam(randomExamCondition());
 		this.setIntendedArrivalTime(randomIntendedArrivalTime());
 		this.setShowupTime(randomShowupTime());
-
 	}
 	
 	public Student(int id, boolean hasExam, int IAT, int ST) {
@@ -27,10 +26,9 @@ public class Student implements Comparable<Student>, Cloneable{
 		this.setHasExam(hasExam);
 		this.setIntendedArrivalTime(IAT);
 		this.setShowupTime(ST);
-
 	}
 
-	// ID
+	//--------------Setters & Getters-------------------
 	public void setID(int id) {
 		this.id = id;
 	}
@@ -39,7 +37,6 @@ public class Student implements Comparable<Student>, Cloneable{
 		return this.id;
 	}
 
-	//hasExam
 	public void setHasExam(boolean HX) {
 		this.hasExam = HX;
 	}
@@ -47,7 +44,7 @@ public class Student implements Comparable<Student>, Cloneable{
 	public boolean getHasExam() {
 		return this.hasExam;
 	}
-	//IsCatch
+
 	public void setIsCatch(boolean isCatch ) {
 		this.isCatch = isCatch; 
 		
@@ -56,7 +53,7 @@ public class Student implements Comparable<Student>, Cloneable{
 	public boolean isCatch() {
 		return isCatch;
 	}
-	//ShowupTime
+
 	public void setShowupTime(int mins) {
 		showupTime = mins;
 	}
@@ -65,7 +62,6 @@ public class Student implements Comparable<Student>, Cloneable{
 		return showupTime;
 	}
 	
-	//IntendedDepartureTime
 	public void setIntendedArrivalTime(int mins) {
 		intendedArrivalTime = mins;
 	}
@@ -74,32 +70,43 @@ public class Student implements Comparable<Student>, Cloneable{
 		return intendedArrivalTime ;
 	}
 	
+	//---------------------Methods---------------------------
+	
+	// Generate random ID for the student
 	public int randomID() {
-
-		int id = (int) (Math.random() * (1000000) ) + 1000000;
+		// Random number between 2200000 & 1000000
+		int id = (int) (Math.random() * (1200000) ) + 1000000;
 		return id;
 	}
 	
+	// Generate random probability of student having an exam
 	public boolean randomExamCondition() {
+		// Random exam probability of 5%
 		boolean Exam = Math.random() < 0.95? false:true;
 		return Exam;
 	}
 	
+	// Generate random showed up time at the bus station
 	public int randomShowupTime() {
+		// Random show up time of 30 minutes before bus departure time
 		int randomMinutes =  getIntendedArrivalTime() - 60 + (int) (Math.random() * 30) ;
 		return randomMinutes;
 	}
 	
+	// Generate random Intended time of arriving to KAU.
 	public int randomIntendedArrivalTime() {
+		// Random intended time of arriving at campus between 6AM to 10PM
 		  int randomTime = (int) (Math.random() * ( 32 ) + 1) * 30;
 		  if (randomTime == 960) {
 			  return randomTime;
+		  // if the random time is less than 60min (no classes at that time) add 60 more minutes
 		  } else if (randomTime < 60) {
 			  return randomTime + 60;
 		  }else 
 			  return randomTime;
 	}
-
+	
+	// Compare show up times of students
 	@Override
 	public int compareTo(Student comparestu)
     {
@@ -109,10 +116,8 @@ public class Student implements Comparable<Student>, Cloneable{
 
     }
 
-	// From this line is just for testing you can delete it-------------
 	@Override
 	public String toString() {
-//		return "Student ["id=" + id + ",      hasExam=" + hasExam + ",    intendedArrivalTime=" + getTime(intendedArrivalTime) + ",      showupTime=" + getTime(showupTime) + "]";
 		int ID = this.getID();
 		boolean hasE = this.getHasExam();
 		String ST = Time.MinutesToTime(this.getShowupTime());
@@ -128,10 +133,11 @@ public class Student implements Comparable<Student>, Cloneable{
 	
     @Override
     protected Object clone() throws CloneNotSupportedException {
+    	//shallow copy
         return super.clone();
     }
     
-    
+    //deep copy
 //    public Student clone(){
 //    	Student p = new Student();
 //        p.hasExam = this.hasExam;
