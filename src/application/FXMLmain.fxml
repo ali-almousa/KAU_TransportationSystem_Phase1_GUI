@@ -102,7 +102,7 @@
             <Font size="1.0" />
          </font>
       </Button>
-      <ImageView fitHeight="113.0" fitWidth="114.0" layoutX="36.0" layoutY="12.0" onDragEntered="#Katchup" onMouseDragged="#Katchup" onMousePressed="#Katchup" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="113.0" fitWidth="114.0" layoutX="36.0" layoutY="12.0" onDragEntered="#Katchup" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@KAU.png" />
          </image>
