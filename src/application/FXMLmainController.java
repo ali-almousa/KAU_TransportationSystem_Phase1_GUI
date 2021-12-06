@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
@@ -20,6 +21,11 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +36,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -40,6 +47,8 @@ public class FXMLmainController  implements Initializable{
 	public static ArrayList<Flight> flightsAll = new ArrayList<>();
 	public static int flightNumber;
 	public static String summaryP1;
+	public static ArrayList<ArrayList<Flight>> flightReportP1 = new ArrayList<ArrayList<Flight>>();
+	public static ArrayList<Integer> currentStudetnsNumList = new ArrayList<>();
 	//Starting
 	@FXML
 	private Button Start;
@@ -96,8 +105,6 @@ public class FXMLmainController  implements Initializable{
 	//-----------------------------------------------
 	//Day Summary pop Up
 	@FXML
-	private TextField SummaryDayTextField;
-	@FXML
 	private Button SummaryDayButton;
 	//Inside Day Summary Window
 	@FXML
@@ -105,18 +112,134 @@ public class FXMLmainController  implements Initializable{
 	@FXML
 	private Button CloseDaySummaryButton;
 	//-----------------------------------------------
+	@FXML
+	private ImageView KatchupImage;
+
+	@FXML
+	private ImageView Katchup;
+	@FXML
+	private TextField DayNumberTextField;
+	@FXML
+	private TextField DayNumberTextField2;
+	@FXML
+	private Button SearchDayButton;
+	
+	@FXML
+	public void dayNumberSearch(ActionEvent e) throws IOException{
+		int dayNum = Integer.parseInt(DayNumberTextField2.getText()) - 1;
+		ArrayList<Flight> flights = FXMLmainController.flightReportP1.get(dayNum);
+		
+
+		
+		//Total catches
+		int catches = 0;
+		int totalStudetnsDelivered = 0;
+		double totalDistance = 0;
+		double totalFuel = 0;
+		int ID = -1;
+		for(int i = 0; i < flights.size(); i++) {
+			if (ID != flights.get(i).busUsed.getID()) {
+				totalFuel+= flights.get(i).busUsed.getFuelConsumption();
+				totalDistance += flights.get(i).busUsed.getDistanceKm();
+				ID = flights.get(i).busUsed.getID();
+			}
+			for (Student S : flights.get(i).studentsInTrip) {
+				totalStudetnsDelivered++;
+				if (S.isCatch) {
+					catches++;
+				}
+			}
+		}
+		//Total misses
+		int totalStudetns = FXMLmainController.currentStudetnsNumList.get(dayNum);
+		int misses = totalStudetns - catches;
+		//catches%
+		String perCC = String.format("%.2f", 100*((double)(catches) / (catches+misses))) + "%";
+
+		
+		String daySummary = String.format("Total Catches: %d\t\tTotal Misses: %d\t\tTotal Catches: %s\t\tTotal Number of Flights: %d\t\t\nTotal Students Delivered: %d\t\t"
+				+ "Total Students not Delivered: %d\t\tTotal Distance KM: %.2f\t\tTotal Fuel L: %.2f"
+				, catches, misses, perCC, flights.size(), totalStudetnsDelivered, totalStudetns - totalStudetnsDelivered, totalDistance, totalFuel);
+		DaySummaryReport.setText(daySummary);
+		DaySummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 2em;");
+
+		
+	}
+	
+	@FXML
+	public void Katchup(ActionEvent e) throws IOException{
+
+//			Katchup.setOpacity(0.2);
+//			Stage stage;
+//			Parent root;
+//			
+//			stage = new Stage();
+//			root = FXMLLoader.load(getClass().getResource("FXMLketchup.fxml"));
+//			stage.setScene(new Scene(root));	
+//			stage.initModality(Modality.APPLICATION_MODAL);
+//			stage.initOwner(SearchIDButton.getScene().getWindow());
+//			stage.showAndWait();
+
+			TranslateTransition translate = new TranslateTransition();
+			translate.setNode (Katchup);
+//			translate.setDuration(Duration.millis(1000));
+//			translate.setCycleCount(TranslateTransition.INDEFINITE);
+//			translate.setByY(70);
+			translate.setByX(670);
+			translate.setByY(400);
+
+			translate.setAutoReverse(true);
+			translate.play();
+			
+			// rotate
+			RotateTransition rotate = new RotateTransition();
+			rotate.setNode(Katchup);
+//			rotate.setDuration(Duration.millis(1000));
+//			rotate.setcycleCount(TranslateTransition.INDEFINITE);|
+			rotate.setInterpolator (Interpolator.LINEAR);
+			rotate.setByAngle(360);
+			rotate.play();
+			
+			// fade
+			FadeTransition fade = new FadeTransition();
+			fade.setNode (Katchup);
+//			fade.setDuration(Duration.millis(1000));
+//			fade.setcycleCount(TranslateTransition.INDEFINITE);
+			fade.setInterpolator(Interpolator.LINEAR);
+			fade.setFromValue(0);
+			fade.setToValue(1);
+			fade.play();
+			
+			// scale
+			ScaleTransition scale =  new ScaleTransition();
+			scale.setNode(Katchup);
+//			scale.setDuration(Duration.millis(1000));
+//			scale.setCycleCount(TranslateTransition.INDEFINITE);
+			scale.setInterpolator(Interpolator.LINEAR);
+			scale.setByX(1.2);
+			scale.setAutoReverse(true);
+			scale.play();
+			
+		
+	}
 	
 	@FXML
 	public void flightNumberSearch(ActionEvent e) throws IOException{
-		String flightNum = FlightNumberTextField.getText();
+		int flightNum = Integer.parseInt(FlightNumberTextField.getText());
+		int dayNum = Integer.parseInt(DayNumberTextField.getText());
 		
-		for(int i = 0; i < FXMLmainController.flightsAll.size(); i++) {
-			if(i == Integer.parseInt(flightNum) - 1) {
-				FlightSummaryReport.setText("Flight Number: " + (i + 1) + "     " +FXMLmainController.flightsAll.get(i).toString());
-				FlightSummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 2em;");
-//				FlightSummaryReport.setStyle("-fx-font-size: 2em;");
-			}
-		}
+		FlightSummaryReport.setText("Flight Number: " + flightNum + "     " + FXMLmainController.flightReportP1.get(dayNum - 1).get(flightNum - 1).toString());
+		FlightSummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 2em;");
+//		FlightSummaryReport.setStyle("-fx-font-size: 2em;");
+		
+		
+//		for(int i = 0; i < FXMLmainController.flightsAll.size(); i++) {
+//			if(i == Integer.parseInt(flightNum) - 1) {
+//				FlightSummaryReport.setText("Flight Number: " + (i + 1) + "     " +FXMLmainController.flightsAll.get(i).toString());
+//				FlightSummaryReport.setStyle("-fx-text-fill: red; -fx-font-size: 2em;");
+////				FlightSummaryReport.setStyle("-fx-font-size: 2em;");
+//			}
+//		}
 		
 	}
 	
@@ -125,13 +248,17 @@ public class FXMLmainController  implements Initializable{
 
 		Stage stage;
 		Parent root;
-			
-			stage = new Stage();
-			root = FXMLLoader.load(getClass().getResource("FXMLFlightSummary.fxml"));
-			stage.setScene(new Scene(root));	
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.initOwner(SearchIDButton.getScene().getWindow());
-			stage.showAndWait();
+			try {
+				stage = new Stage();
+				root = FXMLLoader.load(getClass().getResource("FXMLFlightSummary.fxml"));
+				stage.setScene(new Scene(root));	
+				stage.initModality(Modality.APPLICATION_MODAL);
+				stage.initOwner(SearchIDButton.getScene().getWindow());
+				stage.showAndWait();
+			}catch(Exception e1) {
+				System.out.println(e1.getMessage() + " " + e1);
+			}
+
 		
 	}
 	
@@ -172,7 +299,7 @@ public class FXMLmainController  implements Initializable{
 //		if(e.getSource() == SearchIDButton) {
 //		String ID = SearchIDTextField.getText();
 //		System.out.print(ID);
-		
+		try {
 			stage = new Stage();
 			root = FXMLLoader.load(getClass().getResource("FXMLsearchID.fxml"));
 			stage.setScene(new Scene(root));
@@ -188,6 +315,9 @@ public class FXMLmainController  implements Initializable{
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(SearchIDButton.getScene().getWindow());
 			stage.showAndWait();
+		}catch(Exception e1) {
+			System.out.println(e1.getMessage() + " " + e1);
+		}
 //			SearchIDReport.setText("jyhh");
 			
 			
@@ -334,6 +464,11 @@ public class FXMLmainController  implements Initializable{
 		for(int n = 0; n < parts.length; n++) {
 		   n1[n] = Integer.parseInt(parts[n]);
 		}
+		FXMLmainController.currentStudetnsNumList.clear();
+		for(int i = 0; i<n1.length; i++) {
+			FXMLmainController.currentStudetnsNumList.add(n1[i]);
+		}
+		
 		
 		try {
 			if(n1.length != KAUdays) {
@@ -735,8 +870,9 @@ public class FXMLmainController  implements Initializable{
 		
 		
 		} //end days loop
-		
-		
+		// make the flight report accessible by other members of the class
+		FXMLmainController.flightReportP1.clear();
+		FXMLmainController.flightReportP1 = flightReport;
 		totalSummary[2] = Flight.getNumFlights();
 		ArrayList<Object> result = new ArrayList<>();
 		result.add(flightReport);
@@ -750,7 +886,6 @@ public class FXMLmainController  implements Initializable{
 		@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	
