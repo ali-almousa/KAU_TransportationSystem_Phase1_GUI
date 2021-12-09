@@ -5,27 +5,76 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Ali + Ahmed
+ * This class is for creating busses with all specifications required
+ * and for performing some related procedures such as loading students, 
+ * sending the bus and so on.
+ * 
+ * @author Ali Almousa + Ahmed Alhkyal
  *
  */
 public class Bus implements Cloneable{
 	
 	//--------------------Bus Variables----------------------
-	private int numberTrips;		// Number of trips the bus made
-	private double distanceKm;		// Distance the bus has traveled
-	private double fuelConsumption;	// Fuel the bus has consumed
-	private boolean available;		// Indicate if the bus is available to make a trip
-	private int capacity;			// Seat capacity of the bus
-	private int avalAt;				// Time bus is available at
-	private int ID;					// Bus ID
-	public ArrayList<Flight> tripsArray = new ArrayList<>();		  // Array of trips made by bus
-	public ArrayList<Student> flightStudents = new ArrayList<>();	  // Array of student in the flight
-	private int campusArrival;		// Time the bus Arrived at campus
-	private int dormDeparture;		// Time the bus left the dorms
-	private int scheduledDormDeparture;								  // Time the bus will leave dorms 
-	private ArrayList<Student> studentsDelivered = new ArrayList<>(); // Array of students delivered to campus
 	
-	//--------------------Bus Constructors-------------------
+	/**
+	 * Number of trips the bus made
+	 */
+	private int numberTrips;
+	/**
+	 * Distance the bus has traveled
+	 */
+	private double distanceKm;	
+	/**
+	 * Fuel the bus has consumed
+	 */
+	private double fuelConsumption;
+	/**
+	 * Indicate if the bus is available to make a trip
+	 */
+	private boolean available;
+	/**
+	 * Seat capacity of the bus
+	 */
+	private int capacity;		
+	/**
+	 * Time bus is available at
+	 */
+	private int avalAt;				
+	/**
+	 * Bus ID
+	 */
+	private int ID;				
+	/**
+	 * Array of trips made by bus
+	 */
+	public ArrayList<Flight> tripsArray = new ArrayList<>();		 
+	/**
+	 * Array of student in the flight
+	 */
+	public ArrayList<Student> flightStudents = new ArrayList<>();	 
+	/**
+	 * Time the bus Arrived at campus
+	 */
+	private int campusArrival;	
+	/**
+	 * Time the bus left the dorms
+	 */
+	private int dormDeparture;	
+	/**
+	 * Time the bus will leave dorms 
+	 */
+	private int scheduledDormDeparture;								 
+	/**
+	 * Array of students delivered to campus
+	 */
+	private ArrayList<Student> studentsDelivered = new ArrayList<>(); 
+	
+	/**
+	 * A constructor for creating a bus with two specifications determined by the caller
+	 * 
+	 * @param scheduledDormDeparture is the time this bus has to move to campus 
+	 * @param ID is the unique identifier of the bus
+	 */
 	public Bus(int scheduledDormDeparture, int ID) {
 		this.setAvailable(true);
 		this.setCapacity(10);
@@ -33,33 +82,54 @@ public class Bus implements Cloneable{
 		this.setScheduledDormDeparture(scheduledDormDeparture);
 	}
 	
-	//--------------Setters & Getters-------------------
+	/**
+	 * 
+	 * @return all students delivered by this bus in an ArrayList
+	 */
 	public ArrayList<Student> getStudentsDelivered() {
 		return studentsDelivered;
 	}
-
+	/**
+	 * 
+	 * @param ArrayList of delivered students
+	 */
 	public void setStudentsDelivered(ArrayList<Student> studentsDelivered) {
 
 		this.studentsDelivered = studentsDelivered;
 	}
-	
+	/**
+	 * 
+	 * @param Student to be added to the list of delivered students 
+	 */
 	public void addStudentsDelivered(Student S) {
 		this.studentsDelivered.add(S);
 	}
-
+	/**
+	 * 
+	 * @return the ID of theis bus 
+	 */
 	public int getID() {
 		return ID;
 	}
-
+	/**
+	 * 
+	 * @param ID to be set for this bus 
+	 */
 	public void setID(int ID) {
 		this.ID = ID;
 	}
-
+	/**
+	 * 
+	 * @return the Scheduled time the bus has to move 
+	 */
 	public int getScheduledDormDeparture() {
 		return scheduledDormDeparture;
 	}
 
-	// Setter with condition
+	/**
+	 * 
+	 * @param the Scheduled time the bus has to move 
+	 */
 	public void setScheduledDormDeparture(int scheduledDormDeparture) {
 		//if scheduledDormDeparture equals to or greater than 10:00pm then set this bus as unavailable  
 		if(scheduledDormDeparture >= 960) {
@@ -67,83 +137,139 @@ public class Bus implements Cloneable{
 		}
 		this.scheduledDormDeparture = scheduledDormDeparture;
 	}
-
+	/**
+	 * 
+	 * @return number of trips the bus has made so far 
+	 */
 	public int getNumberTrips() {
 		return numberTrips;
 	}
-
+	/**
+	 * 
+	 * @param number of trips
+	 */
 	public void setNumberTrips(int numberTrips) {
 		this.numberTrips = numberTrips;
 	}
-
+	/**
+	 * 
+	 * @return the distance in KM this bus has covered do far
+	 */
 	public double getDistanceKm() {
 		return distanceKm;
 	}
-
+	/**
+	 * 
+	 * @param the distance in KM this bus has covered do far
+	 */
 	public void setDistanceKm(double distanceKm) {
 		this.distanceKm = distanceKm;
 	}
-
+	/**
+	 * 
+	 * @return the fuel this bus has consumed so far
+	 */
 	public double getFuelConsumption() {
 		return fuelConsumption;
 	}
-
+	/**
+	 * 
+	 * @param the fuel this bus has consumed so far
+	 */
 	public void setFuelConsumption(double fuelConsumption) {
 		this.fuelConsumption = fuelConsumption;
 	}
-
+	/**
+	 * 
+	 * @return the availability of the bus
+	 */
 	public boolean isAvailable() {
 		return available;
 	}
-
+	/**
+	 * 
+	 * @param the availability of the bus
+	 */
 	public void setAvailable(boolean aval) {
 		this.available = aval;
 	}
-	
+	/**
+	 * 
+	 * @return the seat capacity of this bus
+	 */
 	public int getCapacity() {
 		return capacity;
 	}
-
+	/**
+	 * 
+	 * @param the seat capacity of this bus
+	 */
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	
+	/**
+	 * 
+	 * @return the ArrayList of the trips this bus has made
+	 */
 	public ArrayList<Flight> getTripsArray() {
 		return tripsArray;
 	}
-
-	// will return the time the bus will arrive to the campus in minutes form
+	/**
+	 * 
+	 * @return the time the bus will arrive to the campus in minutes form the reference time (starting hour)
+	 */
 	public int getCampusArrival() {
 		return campusArrival;
 	}
-
+	/**
+	 * 
+	 * @param the time this bus has arrived to campus in minutes form the reference time (starting hour)
+	 */
 	public void setCampusArrival(int mins) {
 		this.campusArrival = mins;
 	}
-
+	/**
+	 * 
+	 * @return the time this bus has moved to campus in minutes form the reference time (starting hour)
+	 */
 	public int getDormDeparture() {
 		return dormDeparture;
 	}
-
+	/**
+	 * 
+	 * @param the time this bus has moved to campus in minutes form the reference time (starting hour)
+	 */
 	public void setDormDeparture(int mins) {
 		this.dormDeparture = mins;
 	}
-
+	/**
+	 * 
+	 * @return ArrayList of students in the current flight
+	 */
 	public ArrayList<Student> getFlightStudents() {
 		return flightStudents;
 	}
-	
+	/**
+	 * 
+	 * @return the availability of the bus
+	 */
 	public int getAvalAt() {
 		return avalAt;
 	}
-
+	/**
+	 * 
+	 * @param the time (in minutes) in which the bus will be available 
+	 */
 	public void setAvalAt(int avalAt) {
 		this.avalAt = avalAt;
 	}
 	
 	//-------------------Methods------------------------
-	
-	// Add a trip to the array of trips & update attribute of the bus (Polymorphism)
+	/**
+	 * Add a trip to the array of trips & update attribute of the bus (Polymorphism)
+	 * 
+	 * @param trip
+	 */
 	public void addTripsArray( Flight trip ) {
 		this.tripsArray.add(trip);
 		// setting cumulative attributes
@@ -151,13 +277,18 @@ public class Bus implements Cloneable{
 		this.setFuelConsumption(trip.getFUEL_TO_KAU() + this.getFuelConsumption());
 		this.setNumberTrips(this.getNumberTrips() + 1);
 	}
-
-	// Add a student to the flight array holding student currently delivered to campus
+	/**
+	 * 
+	 * @param A student to be added to the flight array holding student currently delivered to campus
+	 */
 	public void addFlightStudents(Student student) {
 		this.flightStudents.add(student);
 	}
-	
-	// Load the student into flight and adjust number of available seats 
+	/**
+	 * Load the student into flight and adjust number of available seats 
+	 * 
+	 * @param s is a student riding the bus
+	 */
 	public void loadStudent(Student s) {
 		// reduce available seats by one
 		this.setCapacity(this.getCapacity() - 1);
@@ -169,15 +300,25 @@ public class Bus implements Cloneable{
 		// this array will be cleared when the bus is sent
 		this.addFlightStudents(s);
 	}
-	
-	// Check & update available time of the bus
+	/**
+	 * Check & update available time of the bus
+	 * 
+	 * @param mins is the real time at this moment
+	 */
 	public void checkAval(int mins) {
 		// if there is a time set for available then update the availability accordingly
 		if(this.getAvalAt() != 0)
 		this.setAvailable(mins >= this.getAvalAt());
 	}
-	
-	// Send the bus to campus and conclude the flight data
+	/**
+	 * Send the bus to campus and conclude the flight data and update all students data 
+	 * 
+	 * @param days is the day this sending is taken place at 
+	 * @param tempStudents a temporary ArrayList of students in the whole day 
+	 * @param flightReport ArrayList of ArrayList of flights holding all data of flights and students and busses in it
+	 * @param studentsALl ArrayList of the whole students in this day with updated data
+	 * @param flightsAll ArrayList of flights holding all flights this bus had made
+	 */
 	public void sendBus(int days, ArrayList<Student> tempStudents, ArrayList<ArrayList<Flight>> flightReport, ArrayList<Student> studentsALl, ArrayList<Flight> flightsAll) {
 		//create an object of the calling bus
 		Bus callingBus = this;
@@ -206,8 +347,9 @@ public class Bus implements Cloneable{
 		// clear the attribute flightStudents to fill it with the students of the next flight
 		callingBus.getFlightStudents().clear();
 	}
-	
-	// Clone bus object...
+	/**
+	 * deep copying the this bus
+	 */
 	@Override
     public Object clone() throws CloneNotSupportedException{
         // Assign the shallow copy to new reference variable
@@ -228,17 +370,26 @@ public class Bus implements Cloneable{
         // to make it a deep copy
         return CB;
     }
-    
-	// String representation of bus moving to campus at declared time
+    /**
+     * String representation of bus moving to campus at declared time
+     */
 	public String toString() {
 		return "{Bus Moving at: " + this.getScheduledDormDeparture() + "mins}";
 	}
 	
 	//---------------------Inner Classes---------------------------
-	
-	// Class Updater is used to update data after concluding the flight
+	/**
+	 * an inner class that is used to update data after concluding the flight
+	 * @author Ahmed 
+	 *
+	 */
 	class Updater {
-		// Updating the departing bus' data
+		/**
+		 * Updating the departing bus' data
+		 * 
+		 * @param callingBus the current bus moving
+		 * @param currentFlight the flight that is being made currently
+		 */
 		public static void updateBusData(Bus callingBus, Flight currentFlight) {
 			//setting the bus as unavailable
 			callingBus.setAvailable(false);
@@ -253,16 +404,21 @@ public class Bus implements Cloneable{
 			//updating the capacity of the bus (all seats are available)
 			callingBus.setCapacity(10);
 		}
-		
-		// update the data of the flight that about to be launched
+		/**
+		 * update the data of the flight that about to be launched
+		 * 
+		 * @param callingBus the current bus moving
+		 * @param currentFlight the flight that is being made currently
+		 */
 		public static void updateFlightData(Bus callingBuss, Flight currentFlight) {
 			//setting the time that the flight has departed the dorms
 			currentFlight.setTimeOfDeparture(callingBuss.getDormDeparture());
 			//setting the time that the flight has arrived at campus
 			currentFlight.setTimeOfArrival(callingBuss.getCampusArrival());
 		}
-		
-		// Update the condition of students in the flight to whether they caught or missed their lecture
+		/**
+		 * Update the condition of students in the flight to whether they caught or missed their lecture
+		 */
 		public static void updateMissCatch(Bus callingBus, Flight currentFlight, ArrayList<Student> tempStudents, ArrayList<Student> studentsALl) {
 			int numStudetns = callingBus.getFlightStudents().size(); // number of students in the flight
 			ArrayList<Student> S = new ArrayList<>();
@@ -285,8 +441,14 @@ public class Bus implements Cloneable{
 				currentFlight.studentsInTrip.add(student);
 			}
 		}
-		
-		// Update the launched flight data
+		/**
+		 * Update the launched flight data
+		 * 
+		 * @param days is the day this sending is taken place at 
+		 * @param currentFlight the flight that is being made currently
+		 * @param flightReport ArrayList of ArrayList of flights holding all data of flights and students and busses in it
+		 * @param flightsAll ArrayList of flights holding all flights this bus had made
+		 */
 		public static void updateFlightReport(int days, Flight currentFlight, ArrayList<ArrayList<Flight>> flightReport, ArrayList<Flight> flightsAll) {
 			int catches = currentFlight.getCatches(); // number of student caught their lecture
 			int misses = currentFlight.studentsInTrip.size() - currentFlight.getCatches(); // number of student missed their lecture

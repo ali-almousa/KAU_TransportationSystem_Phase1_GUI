@@ -1,8 +1,4 @@
-/**
- * @author Ali + Azeez 
- *
- *
- */
+
 package application;
 
 import java.awt.Frame;
@@ -41,15 +37,23 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.control.TextArea;
-
+/**
+ * the main controller of the GUI with all event driven programming required to function properly
+ * 
+ * @author Ali + Azeez 
+ *
+ */
 public class FXMLmainController  implements Initializable{
 	//lists to save data for reports
 	public static ArrayList<Student> studentsAll = new ArrayList<>();
 	public static ArrayList<Flight> flightsAll = new ArrayList<>();
 	public static int flightNumber;
 	public static String summaryP1;
+	public static String daySummaryP1;
 	public static ArrayList<ArrayList<Flight>> flightReportP1 = new ArrayList<ArrayList<Flight>>();
 	public static ArrayList<Integer> currentStudetnsNumList = new ArrayList<>();
+
+	
 	//Starting
 	@FXML
 	private Button Start;
@@ -261,42 +265,16 @@ public class FXMLmainController  implements Initializable{
 	public void SearchIDButtonPopUp(ActionEvent e) throws IOException{
 		Stage stage;
 		Parent root;
-		
-//		SearchIDReport.setText("jyhh");
-		
-//		if(e.getSource() == SearchIDButton) {
-//		String ID = SearchIDTextField.getText();
-//		System.out.print(ID);
 		try {
 			stage = new Stage();
 			root = FXMLLoader.load(getClass().getResource("FXMLsearchID.fxml"));
 			stage.setScene(new Scene(root));
-			
-			//Student ID
-//			SearchIDTextField.getText();
-			
-			//Get student Info.
-			
-			//Set info
-			
-			
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(SearchIDButton.getScene().getWindow());
 			stage.showAndWait();
 		}catch(Exception e1) {
 			System.out.println(e1.getMessage() + " " + e1);
 		}
-//			SearchIDReport.setText("jyhh");
-			
-			
-//		}else {
-//			stage = (Stage) CloseSearchIDButton.getScene().getWindow();
-//			stage.close();
-//			}
-		
-		
-		
-		
 		
 	}
 	//Display the Flight Summary PopUp window
@@ -342,19 +320,22 @@ public class FXMLmainController  implements Initializable{
 	}
 	//Exporting Phase1
 	@FXML
-	public void ExportPhase1(ActionEvent e) throws IOException, FileNotFoundException{
+	public void ExportPhase1(ActionEvent e1) throws IOException, FileNotFoundException{
 		File file = new File("ReportOfPhase1.txt");
-		
 		try(PrintWriter write = new PrintWriter(file)){
-			write.printf("&&&&&&&&&&&&&&&&&&&&& %s &&&&&&&&&&&&&&&&&&&&&\n\n", "Pahse#1 Full Report");
+			write.printf("Number of Days: %s\nNumber of Busses: %s\nNumbebr of Students: %s\n\n",NumberOfDays.getText(),NumberOfBusses.getText(), NumberOfStudents.getText());
+			write.printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& %s &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n\n", "Pahse#1 Full Report");
 			write.print(FXMLmainController.summaryP1);
+			write.printf("\n\n\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& %s &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n\n", "Summary Pahse#1");
+			write.print(FXMLmainController.daySummaryP1);
+
 		}
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.initStyle(StageStyle.UTILITY);
-		alert.setTitle("Success");
-		alert.setHeaderText(null);
-		alert.setContentText(String.format("%s", "Phase1 report exported successfully to 'ReportOfPhase1.txt' in the same directory!"));
-		alert.showAndWait();
+		Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+		alert2.initStyle(StageStyle.UTILITY);
+		alert2.setTitle("Success");
+		alert2.setHeaderText(null);
+		alert2.setContentText(String.format("%s", "Phase1 report exported successfully to 'ReportOfPhase1.txt' in the same directory!"));
+		alert2.showAndWait();
 	}
 	//Exporting Phase2
 	@FXML
@@ -372,6 +353,12 @@ public class FXMLmainController  implements Initializable{
 		alert.initStyle(StageStyle.UTILITY);
 		alert.setTitle("Error Message");
 		alert.setHeaderText(null);
+		
+		//clear number of flights
+		Flight.setNumFlights(0);
+		
+		
+		
 		System.out.println("Start Simulation");
 		int KAUdays;
 		try {
@@ -534,34 +521,169 @@ public class FXMLmainController  implements Initializable{
         	
         	
         }
+        
+        
+        
+        // custom formating for the txt file
+        String txtExportComp = "";
+        String txtExportSum = "";
+        for(int day = 0; day < flightReport.size(); day++) {
+        	txtExportComp+=String.format("\n%n%s Day %d %s%n\n",star(60), day + 1, star(69));
+        	txtExportComp+=String.format("%n%s%n",minus(142));
+        	txtExportComp+=String.format(" 									        %s","Flights Information:");
+        	
+        	for(int flight = 0; flight < flightReport.get(day).size(); flight++) {
+//        		+++++++++++++++++++++++++++Flights Information+++++++++++++++++++++++++++++++++++++
+        		Flight currentFlight = flightReport.get(day).get(flight);
+        		txtExportComp+=String.format("%n%s%n",minus(142));
+                txtExportComp+=String.format("\s\s\s\s%s", "Flight");
+                txtExportComp+=String.format("	   %s", "Students");
+                txtExportComp+=String.format("	   %s", "Moved at");
+                txtExportComp+=String.format("	      %s", "Arraived at");
+                txtExportComp+=String.format("	 %s", "Cathces");
+                txtExportComp+=String.format("	    %s", "Misses");
+                txtExportComp+=String.format("	 %s", "Catch %");
+                txtExportComp+=String.format(" 	 %s", "Flight Type");
+                txtExportComp+=String.format("	    %s\n", "BusID");
+                
+                txtExportComp+=String.format("	%d", flight + 1);
+                txtExportComp+=String.format("		%d", currentFlight.studentsInTrip.size());
+                txtExportComp+=String.format("	    %s", Time.MinutesToTime(currentFlight.getTimeOfDeparture()));
+                txtExportComp+=String.format("	       %s", Time.MinutesToTime(currentFlight.getTimeOfArrival()));
+                txtExportComp+=String.format("       \t\s\s\s\s\s%d", currentFlight.getCatches());
+                txtExportComp+=String.format("			%d", currentFlight.studentsInTrip.size() - currentFlight.getCatches());
+                txtExportComp+=String.format("	   %s", currentFlight.getCatchesPer());
+                txtExportComp+=String.format("	   %s", currentFlight.getTypeOfFilght());
+                txtExportComp+=String.format("      %s", currentFlight.getBusUsed().getID());
+                txtExportComp+=String.format("%n%s%n",minus(142));
+//        		+++++++++++++++++++++++++++Flights Information+++++++++++++++++++++++++++++++++++++
+                
+//        		+++++++++++++++++++++++++++Student in Flight Information+++++++++++++++++++++++++++++++++++++
+                
+                txtExportComp+=String.format("   %s", "Student");
+                txtExportComp+=String.format("         %s", "ID");
+                txtExportComp+=String.format("	         %s", "ShowUp Time");
+                txtExportComp+=String.format("	    %s", "Intended Arraival");
+                txtExportComp+=String.format(" 	%s", "isCatch?");
+                txtExportComp+=String.format("	   %s\n", "HasExam?");
+
+                for(int S = 0; S < currentFlight.studentsInTrip.size(); S++) {
+                	Student stu = currentFlight.studentsInTrip.get(S);
+                    txtExportComp+=String.format("	%d", S + 1);
+                    txtExportComp+=String.format("	    %d", stu.getID());
+                    txtExportComp+=String.format("	     %s", Time.MinutesToTime(stu.getShowupTime()));
+                    txtExportComp+=String.format("		%s", Time.MinutesToTime(stu.getIntendedArrivalTime()));
+                    txtExportComp+=String.format("		 %s", stu.isCatch());
+                    txtExportComp+=String.format("		 %s\n", stu.getHasExam());
+                }
+//        		+++++++++++++++++++++++++++Student in Flight Information+++++++++++++++++++++++++++++++++++++
+        		
+        	}
+//        		+++++++++++++++++++++++++++Bus in Flight Information+++++++++++++++++++++++++++++++++++++
+        		txtExportComp+=String.format("%n\t\t\t%s",minus(110));
+        		txtExportComp+=String.format("%n\t\t\t 				     	   	            %s","Bus Information:");
+            	txtExportComp+=String.format("%n\t\t\t%s%n",minus(110));
+                txtExportComp+=String.format("\t\t\t    %s", "BusID");
+                txtExportComp+=String.format("	 %s", "Moved-Distance KM");
+                txtExportComp+=String.format("	 %s", "FuelConsumbtion L");
+                txtExportComp+=String.format(" 	 %s", "Number Of Trips");
+                txtExportComp+=String.format("	%s\n", "Students Delivered");
+
+                for(int B = 0; B < BusReport.get(day).size(); B++) {
+                	Bus Cbus = BusReport.get(day).get(B);
+                    txtExportComp+=String.format("\t\t\t    %d", Cbus.getID());
+                    txtExportComp+=String.format("	           %.2f", Cbus.getDistanceKm());
+                    txtExportComp+=String.format("	           %.2f", Cbus.getFuelConsumption());
+                    txtExportComp+=String.format("		       %d", Cbus.getNumberTrips());
+                    txtExportComp+=String.format("		       %d\n", Cbus.getStudentsDelivered().size());
+                }
+//        		+++++++++++++++++++++++++++Bus in Flight Information+++++++++++++++++++++++++++++++++++++
+                
+                
+        	
+        	
+        	
+        }
+        
+        
+        
+        
+        
+        // **************************Resources Efficiency %***************************** 
+        //X Liter/Satidfied_Student
+        double fuelPerSatidfiedStudent  = ( (double)summaryP1[6] / (int)summaryP1[0] );
+        //X SAR/Satidfied_Student 
+        double pricePerSatidfiedStudent  = fuelPerSatidfiedStudent * 0.52;
+        //X Liter/Student
+        double fuelPerStudent = ( (double)summaryP1[6] / (int)summaryP1[3] );
+        //X SAR/Student 
+        double pricePerStudent = fuelPerStudent * 0.52;
+        //To represent percentage of value of money spent efficiently
+        double valueOfMoney = ( pricePerStudent / pricePerSatidfiedStudent) * 100;
+        // **************************Resources Efficiency %*****************************
+        
+        
 
         double catchPer = 100*((double)(summaryP1[0]) / (summaryP1[0]+summaryP1[1]));
 
-        summaryReportP1+=String.format("%s		 ", "Total Catches");
-        summaryReportP1+=String.format("%s		", "Total Misses");
-        summaryReportP1+=String.format("%s	 	", "Total Catches%");
-        summaryReportP1+=String.format("%s\n", "Total Number of Flgihts");
-        summaryReportP1+=String.format("	%d", (int)summaryP1[0]);
+        summaryReportP1+=String.format("%s	     ", "Total Catches");
+        summaryReportP1+=String.format("%s	     ", "Total Misses");
+        summaryReportP1+=String.format("%s	     ", "Total Catches%");
+        summaryReportP1+=String.format("%s          ", "Total Number of Flgihts");
+        summaryReportP1+=String.format("%s          ", "Trasport Capacity% ");
+        summaryReportP1+=String.format("%s\n", "Total Misses%");
+        summaryReportP1+=String.format("        %d", (int)summaryP1[0]);
         summaryReportP1+=String.format("				%d", (int)summaryP1[1]);
-        summaryReportP1+=String.format("				%.2f%%", catchPer);
-        summaryReportP1+=String.format("					%d\n\n", (int)summaryP1[2]);
+        summaryReportP1+=String.format("		           %.2f%%", catchPer);
+        summaryReportP1+=String.format("		  	       %d", (int)summaryP1[2]);
+        summaryReportP1+=String.format("			   	     %.2f%%", ((double)summaryP1[3] / ((int)summaryP1[2] * 10) )* 100);
+        summaryReportP1+=String.format("				%.2f%%\n\n", 100 - catchPer);
+        
+        
         
         summaryReportP1+=String.format("%s	 	", "Total Students Delivered");
         summaryReportP1+=String.format("%s	 	", "Total Students not Delivered");
-        summaryReportP1+=String.format("%s	 		    ", "Total Distance KM");
-        summaryReportP1+=String.format("%s\n", "Total Fuel L");
-        
-        
-
+        summaryReportP1+=String.format("%s	 	", "Total Distance KM");
+        summaryReportP1+=String.format("%s          ", "Total Fuel L");
+        summaryReportP1+=String.format("%s\n", "value Of Money%");
         summaryReportP1+=String.format("		%d", (int)summaryP1[3]);
         summaryReportP1+=String.format("							%d", (int)summaryP1[4]);
-        summaryReportP1+=String.format("					%.2f", summaryP1[5]);
-        summaryReportP1+=String.format("					%.2f", summaryP1[6]);
- 
-
+        summaryReportP1+=String.format("				       %.2f", summaryP1[5]);
+        summaryReportP1+=String.format("		          %.2f", summaryP1[6]);
+        summaryReportP1+=String.format("	                 %.2f%%", valueOfMoney);
 
         
-        FXMLmainController.summaryP1 = comprehensiveReport;
+        
+        // special formating for txt file
+        txtExportSum+=String.format("%s	     ", "Total Catches");
+        txtExportSum+=String.format("%s	     ", "Total Misses");
+        txtExportSum+=String.format("%s	     ", "Total Catches%");
+        txtExportSum+=String.format("%s          ", "Total Number of Flgihts");
+        txtExportSum+=String.format("%s          ", "Trasport Capacity% ");
+        txtExportSum+=String.format("%s\n", "Total Misses%");
+        txtExportSum+=String.format("        %d", (int)summaryP1[0]);
+        txtExportSum+=String.format("	         %d", (int)summaryP1[1]);
+        txtExportSum+=String.format("		          %.2f%%", catchPer);
+        txtExportSum+=String.format("		  	  %d", (int)summaryP1[2]);
+        txtExportSum+=String.format("			     %.2f%%", ((double)summaryP1[3] / ((int)summaryP1[2] * 10) )* 100);
+        txtExportSum+=String.format("	               %.2f%%\n\n", 100 - catchPer);
+        
+        
+        
+        txtExportSum+=String.format("%s	 	", "Total Students Delivered");
+        txtExportSum+=String.format("%s	 	", "Total Students not Delivered");
+        txtExportSum+=String.format("%s	 	", "Total Distance KM");
+        txtExportSum+=String.format("%s          ", "Total Fuel L");
+        txtExportSum+=String.format("%s\n", "value Of Money%");
+        txtExportSum+=String.format("	  %d", (int)summaryP1[3]);
+        txtExportSum+=String.format("		  \t\t\t\t%d", (int)summaryP1[4]);
+        txtExportSum+=String.format("		        \t%.2f", summaryP1[5]);
+        txtExportSum+=String.format("		           %.2f", summaryP1[6]);
+        txtExportSum+=String.format("	            %.2f%%", valueOfMoney);
+
+        
+        FXMLmainController.summaryP1 = txtExportComp;
+        FXMLmainController.daySummaryP1 = txtExportSum;
         ReportTextAreaPhase1.setText(comprehensiveReport);
         TotalSummaryPhase1.setText(summaryReportP1);
 		
@@ -628,6 +750,17 @@ public class FXMLmainController  implements Initializable{
 	public static ArrayList<Object> GUI(int KAUdays, int KAUbus, int[] KAUstudent) {
 		// report lists
 		double[] totalSummary = new double[7];
+		//Initialize number of catches to 0
+		totalSummary[0] = 0;
+		//Initialize number of total students delivered to 0
+		totalSummary[3] = 0;
+		//Initialize number of misses to 0
+		totalSummary[1] = 0;
+		//Initialize number of total students not delivered to 0
+		totalSummary[4] = 0;
+		//Initialize number of total fuel and distance to 0
+		totalSummary[5] = 0;
+		totalSummary[6] = 0;
 		ArrayList<ArrayList<Flight>> flightReport = new ArrayList<ArrayList<Flight>>(KAUdays);
 		ArrayList<ArrayList<Bus>> busReport = new ArrayList<ArrayList<Bus>>(KAUdays);		
 		for(int i = 0; i<KAUdays; i++) {
@@ -643,13 +776,10 @@ public class FXMLmainController  implements Initializable{
 		
         //************initilize required number of days varaible************
 		
-//		System.out.println("Test days: ");
 		int testDays;
 		//Exception handling
 		try {
-//			if(!isNumeric(testDays) || Integer.parseInt(testDays) <= 0) {
-//				
-//			}
+
 			testDays = KAUdays;
 		}catch(InputMismatchException e){
 			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
@@ -662,18 +792,17 @@ public class FXMLmainController  implements Initializable{
 		
 		//************************BUSSES*************************
         //create a Queue of busses
-//		System.out.println("Number of busses: ");
 		int testBusses;
 		//Exception handling
 		try {
 			testBusses = KAUbus;
 			if(testBusses <= 0) throw new BusNumberException(testBusses);
 		}catch(BusNumberException e) {
-//			System.out.println(e.getMessage() + "the default value is set {2 busses}");
+			System.out.println(e.getMessage() + "the default value is set {2 busses}");
 
 			testBusses = 2;
 		}catch(InputMismatchException e){
-//			System.out.println("Not a valid input for the number of busses. the default value is set {2 busses}");
+			System.out.println("Not a valid input for the number of busses. the default value is set {2 busses}");
 
 			testBusses = 2;
 		}
@@ -702,7 +831,6 @@ public class FXMLmainController  implements Initializable{
 			int studentPointer = 0;
 			
 			//while loop on the array of students
-//			System.out.println("printing the reporting of day#" + days);
 			while (tempStudents.size() < students.size()) {
 				// if clock >= realClock.endingHour
 				if (Time.clock >= realClock.endingHour) break;
@@ -768,7 +896,6 @@ public class FXMLmainController  implements Initializable{
 					// else if the student pointer is null && there is at least one student in the bus
 					else if (studentPointer >= students.size()) {
 						//send the bus
-//						System.out.println();
 						while (true) {
 							if (bus.getScheduledDormDeparture() == Time.clock) break;
 							Time.incrementClock();	

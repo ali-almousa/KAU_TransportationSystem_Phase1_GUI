@@ -5,18 +5,36 @@ import java.util.Arrays;
 
 //
 /**
- * @author Ali
+ * @author  www.techiedelight.com + Ali Almousa
  *
  */
 class Queue
 {
-    public Bus[] arr;      // array to store queue elements
-    private int front;      // front points to the front element in the queue
-    private int rear;       // rear points to the last element in the queue
-    private int capacity;   // maximum capacity of the queue
-    private int count;      // current size of the queue
- 
-    // Constructor to initialize a queue
+	/**
+	 * array to store queue elements
+	 */
+    public Bus[] arr;      
+    /**
+     * front points to the front element in the queue
+     */
+    private int front;      
+    /**
+     * rear points to the last element in the queue
+     */
+    private int rear;       
+    /**
+     * maximum capacity of the queue
+     */
+    private int capacity;   
+    /**
+     * current size of the queue
+     */
+    private int count;      
+    /**
+     * Constructor to initialize a queue
+     * 
+     * @param size which is the number of busses in the queue 
+     */
     Queue(int size)
     {
         arr = new Bus[size];
@@ -25,8 +43,10 @@ class Queue
         rear = -1;
         count = 0;
     }
- 
-    // Utility function to dequeue the front element
+    
+    /**
+     * Utility function to dequeue the front element
+     */
     public void dequeue()
     {
         // check for queue underflow
@@ -41,8 +61,11 @@ class Queue
         front = (front + 1) % capacity;
         count--;
     }
- 
-    // Utility function to add an item to the queue
+    /**
+     * Utility function to add an item to the queue
+     * 
+     * @param item (bus) to be added to the queue
+     */
     public void enqueue(Bus item)
     {
         // check for queue overflow
@@ -58,8 +81,11 @@ class Queue
         arr[rear] = item;
         count++;
     }
- 
-    // Utility function to return the front element of the queue
+    /**
+     * Utility function to return the front element of the queue
+     * 
+     * @return A bus that was added first to the queue
+     */
     public Bus peek()
     {
         if (isEmpty())
@@ -69,22 +95,34 @@ class Queue
         }
         return arr[front];
     }
- 
-    // Utility function to return the size of the queue
+    /**
+     * Utility function to return the size of the queue
+     * 
+     * @return number of busses in the queue
+     */
     public int size() {
         return count;
     }
- 
-    // Utility function to check if the queue is empty or not
+    /**
+     * Utility function to check if the queue is empty or not
+     * 
+     * @return A boolean indicating wither the queue is empty
+     */
+    // 
     public Boolean isEmpty() {
         return (size() == 0);
     }
- 
-    // Utility function to check if the queue is full or not
+    /**
+     * Utility function to check if the queue is full or not
+     * 
+     * @return A boolean indicating wither the queue is empty
+     */
     public Boolean isFull() {
         return (size() == capacity);
     }
-    
+    /**
+     * AString representation of the elements of queue
+     */
     public String toString() {
     	String arrString = Arrays.toString(this.arr);
     	return "Queue: "+ arrString;
