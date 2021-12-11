@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.effect.SepiaTone?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -37,22 +38,17 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <TextField id="NumDays" fx:id="SearchIDTextField" layoutX="23.0" layoutY="165.0" prefHeight="30.0" prefWidth="171.0" promptText="Search on StudentsBy ID ">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
       <TextField id="NumStudents" fx:id="NumberOfStudents" layoutX="862.0" layoutY="118.0" prefHeight="30.0" prefWidth="106.0" promptText="Ex: 17,5,62,3">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button id="DaySummaryButton" fx:id="SummaryDayButton" layoutX="1245.0" layoutY="129.0" mnemonicParsing="false" onAction="#SummaryDayButtonPopUp" prefHeight="30.0" prefWidth="144.0" text="Show Day Summary">
+      <Button id="DaySummaryButton" fx:id="SummaryDayButton" layoutX="1245.0" layoutY="129.0" mnemonicParsing="false" onAction="#SummaryDayButtonPopUp" prefHeight="30.0" prefWidth="203.0" text="Show Day Summary">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button id="DaySummaryButton" fx:id="FlightButton" layoutX="1245.0" layoutY="162.0" mnemonicParsing="false" onAction="#FlightButtonPopUp" prefHeight="30.0" prefWidth="144.0" text="Show Specific Flight">
+      <Button id="DaySummaryButton" fx:id="FlightButton" layoutX="1245.0" layoutY="162.0" mnemonicParsing="false" onAction="#flightNumberButton" prefHeight="30.0" prefWidth="203.0" text="Show Specific Flight">
          <font>
             <Font size="14.0" />
          </font>
@@ -74,27 +70,12 @@
       <Button id="ExportButtonP2" fx:id="ExportPhase2Button" layoutX="1332.0" layoutY="88.0" mnemonicParsing="false" onAction="#ExportPhase2" text="Export Phase2 TXT" />
       <TextArea fx:id="ReportTextAreaPhase1" layoutX="21.0" layoutY="206.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="712.0" promptText="Phase 1 Report" />
       <TextArea fx:id="TotalSummaryPhase1" layoutX="23.0" layoutY="796.0" prefHeight="107.0" prefWidth="712.0" />
-      <TextField id="NumDays" fx:id="SummaryDayTextField" layoutX="1399.0" layoutY="130.0" prefHeight="30.0" prefWidth="50.0" promptText="Day">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
-      <TextField id="NumDays" fx:id="FlightNumberTextField" layoutX="1399.0" layoutY="162.0" prefHeight="30.0" prefWidth="50.0" promptText="Flight">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
-      <Button id="DaySummaryButton" fx:id="SearchIDButton" layoutX="209.0" layoutY="163.0" mnemonicParsing="false" onAction="#SearchIDButtonPopUp" prefHeight="30.0" prefWidth="114.0" text="Search">
+      <Button id="DaySummaryButton" fx:id="SearchIDButton" layoutX="21.0" layoutY="164.0" mnemonicParsing="false" onAction="#SearchIDButtonPopUp" prefHeight="30.0" prefWidth="185.0" text="Search Student By ID">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <ImageView fitHeight="113.0" fitWidth="114.0" layoutX="36.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@KAU.png" />
-         </image>
-      </ImageView>
-      <TextArea fx:id="ReportTextAreaPhase2" layoutX="737.0" layoutY="206.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="712.0" promptText="Phase 2 Report" />
+      <TextArea fx:id="ReportTextAreaPhase2" layoutX="737.0" layoutY="206.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseDragOver="#Katchup" prefHeight="542.0" prefWidth="712.0" promptText="Phase 2 Report" />
       <TextArea fx:id="TotalSummaryPhase2" layoutX="737.0" layoutY="796.0" prefHeight="107.0" prefWidth="712.0" />
       <Label layoutX="296.0" layoutY="756.0" prefHeight="31.0" prefWidth="164.0" text="Summary Phase1">
          <font>
@@ -106,5 +87,25 @@
             <Font size="21.0" />
          </font>
       </Label>
+      <Button contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" onAction="#Katchup">
+         <graphic>
+            <ImageView fx:id="Katchup" fitHeight="144.0" fitWidth="176.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <effect>
+                  <Blend />
+               </effect>
+               <image>
+                  <Image url="@KATCHUP.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font size="1.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="113.0" fitWidth="114.0" layoutX="36.0" layoutY="12.0" onDragEntered="#Katchup" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@KAU.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>
