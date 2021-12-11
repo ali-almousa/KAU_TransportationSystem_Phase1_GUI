@@ -49,9 +49,12 @@ public class FXMLmainController  implements Initializable{
 	public static ArrayList<Flight> flightsAll = new ArrayList<>();
 	public static int flightNumber;
 	public static String summaryP1;
+	public static String summaryP2;
 	public static String daySummaryP1;
+	public static String daySummaryP2;
 	public static ArrayList<ArrayList<Flight>> flightReportP1 = new ArrayList<ArrayList<Flight>>();
 	public static ArrayList<Integer> currentStudetnsNumList = new ArrayList<>();
+	public static ArrayList<ArrayList<Student>> randomStudentsGeneratedForP2 = new ArrayList<ArrayList<Student>>();
 
 	
 	//Starting
@@ -201,7 +204,8 @@ public class FXMLmainController  implements Initializable{
 			ScaleTransition scale =  new ScaleTransition();
 			scale.setNode(Katchup);
 			scale.setInterpolator(Interpolator.LINEAR);
-			scale.setByX(1.2);
+			scale.setByX(5);
+			scale.setByY(5);
 			scale.setAutoReverse(true);
 			scale.play();
 			
@@ -340,7 +344,21 @@ public class FXMLmainController  implements Initializable{
 	//Exporting Phase2
 	@FXML
 	public void ExportPhase2(ActionEvent e) throws IOException{
-		
+		File file = new File("ReportOfPhase2.txt");
+		try(PrintWriter write = new PrintWriter(file)){
+			write.printf("Number of Days: %s\nNumber of Busses: %s\nNumbebr of Students: %s\n\n",NumberOfDays.getText(),NumberOfBusses.getText(), NumberOfStudents.getText());
+			write.printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& %s &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n\n", "Pahse#2 Full Report");
+			write.print(FXMLmainController.summaryP2);
+			write.printf("\n\n\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& %s &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n\n", "Summary Pahse#2");
+			write.print(FXMLmainController.daySummaryP2);
+
+		}
+		Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+		alert2.initStyle(StageStyle.UTILITY);
+		alert2.setTitle("Success");
+		alert2.setHeaderText(null);
+		alert2.setContentText(String.format("%s", "Phase2 report exported successfully to 'ReportOfPhase2.txt' in the same directory!"));
+		alert2.showAndWait();	
 		
 	}
 	
@@ -442,12 +460,18 @@ public class FXMLmainController  implements Initializable{
 		
 		String comprehensiveReport ="";
 		String summaryReportP1 = "";
-		
+        // custom formating for the txt file
+        String txtExportComp = "";
+        String txtExportSum = "";
         
         for(int day = 0; day < flightReport.size(); day++) {
         	comprehensiveReport+=String.format("\n%n%s Day %d %s%n\n",star(60), day + 1, star(69));
         	comprehensiveReport+=String.format("%n%s%n",minus(142));
         	comprehensiveReport+=String.format(" 									        %s","Flights Information:");
+        	
+        	txtExportComp+=String.format("\n%n%s Day %d %s%n\n",star(60), day + 1, star(69));
+        	txtExportComp+=String.format("%n%s%n",minus(142));
+        	txtExportComp+=String.format(" 									        %s","Flights Information:");
         	
         	for(int flight = 0; flight < flightReport.get(day).size(); flight++) {
 //        		+++++++++++++++++++++++++++Flights Information+++++++++++++++++++++++++++++++++++++
@@ -475,66 +499,8 @@ public class FXMLmainController  implements Initializable{
                 comprehensiveReport+=String.format("%n%s%n",minus(142));
 //        		+++++++++++++++++++++++++++Flights Information+++++++++++++++++++++++++++++++++++++
                 
-//        		+++++++++++++++++++++++++++Student in Flight Information+++++++++++++++++++++++++++++++++++++
-                
-                comprehensiveReport+=String.format("   %s", "Student");
-                comprehensiveReport+=String.format("         %s", "ID");
-                comprehensiveReport+=String.format("	         %s", "ShowUp Time");
-                comprehensiveReport+=String.format("	    %s", "Intended Arraival");
-                comprehensiveReport+=String.format(" 	%s", "isCatch?");
-                comprehensiveReport+=String.format("	   %s\n", "HasExam?");
-
-                for(int S = 0; S < currentFlight.studentsInTrip.size(); S++) {
-                	Student stu = currentFlight.studentsInTrip.get(S);
-                    comprehensiveReport+=String.format("	%d", S + 1);
-                    comprehensiveReport+=String.format("	    %d", stu.getID());
-                    comprehensiveReport+=String.format("	     %s", Time.MinutesToTime(stu.getShowupTime()));
-                    comprehensiveReport+=String.format("		%s", Time.MinutesToTime(stu.getIntendedArrivalTime()));
-                    comprehensiveReport+=String.format("			  %s", stu.isCatch());
-                    comprehensiveReport+=String.format("		 %s\n", stu.getHasExam());
-                }
-//        		+++++++++++++++++++++++++++Student in Flight Information+++++++++++++++++++++++++++++++++++++
-        		
-        	}
-//        		+++++++++++++++++++++++++++Bus in Flight Information+++++++++++++++++++++++++++++++++++++
-        		comprehensiveReport+=String.format("%n\t\t\t%s",minus(110));
-        		comprehensiveReport+=String.format("%n\t\t\t 				     	   	            %s","Bus Information:");
-            	comprehensiveReport+=String.format("%n\t\t\t%s%n",minus(110));
-                comprehensiveReport+=String.format("\t\t\t    %s", "BusID");
-                comprehensiveReport+=String.format("	 %s", "Moved-Distance KM");
-                comprehensiveReport+=String.format("	 %s", "FuelConsumbtion L");
-                comprehensiveReport+=String.format(" 	 %s", "Number Of Trips");
-                comprehensiveReport+=String.format("	%s\n", "Students Delivered");
-
-                for(int B = 0; B < BusReport.get(day).size(); B++) {
-                	Bus Cbus = BusReport.get(day).get(B);
-                    comprehensiveReport+=String.format("\t\t\t	%d", Cbus.getID());
-                    comprehensiveReport+=String.format("	            %.2f", Cbus.getDistanceKm());
-                    comprehensiveReport+=String.format("				   %.2f", Cbus.getFuelConsumption());
-                    comprehensiveReport+=String.format("				  %d", Cbus.getNumberTrips());
-                    comprehensiveReport+=String.format("			 	 %d\n", Cbus.getStudentsDelivered().size());
-                }
-//        		+++++++++++++++++++++++++++Bus in Flight Information+++++++++++++++++++++++++++++++++++++
-                
-                
-        	
-        	
-        	
-        }
-        
-        
-        
-        // custom formating for the txt file
-        String txtExportComp = "";
-        String txtExportSum = "";
-        for(int day = 0; day < flightReport.size(); day++) {
-        	txtExportComp+=String.format("\n%n%s Day %d %s%n\n",star(60), day + 1, star(69));
-        	txtExportComp+=String.format("%n%s%n",minus(142));
-        	txtExportComp+=String.format(" 									        %s","Flights Information:");
-        	
-        	for(int flight = 0; flight < flightReport.get(day).size(); flight++) {
 //        		+++++++++++++++++++++++++++Flights Information+++++++++++++++++++++++++++++++++++++
-        		Flight currentFlight = flightReport.get(day).get(flight);
+//        		Flight currentFlight = flightReport.get(day).get(flight);
         		txtExportComp+=String.format("%n%s%n",minus(142));
                 txtExportComp+=String.format("\s\s\s\s%s", "Flight");
                 txtExportComp+=String.format("	   %s", "Students");
@@ -560,15 +526,31 @@ public class FXMLmainController  implements Initializable{
                 
 //        		+++++++++++++++++++++++++++Student in Flight Information+++++++++++++++++++++++++++++++++++++
                 
+                comprehensiveReport+=String.format("   %s", "Student");
+                comprehensiveReport+=String.format("         %s", "ID");
+                comprehensiveReport+=String.format("	         %s", "ShowUp Time");
+                comprehensiveReport+=String.format("	    %s", "Intended Arraival");
+                comprehensiveReport+=String.format(" 	%s", "isCatch?");
+                comprehensiveReport+=String.format("	   %s\n", "HasExam?");
+
+                
                 txtExportComp+=String.format("   %s", "Student");
                 txtExportComp+=String.format("         %s", "ID");
                 txtExportComp+=String.format("	         %s", "ShowUp Time");
                 txtExportComp+=String.format("	    %s", "Intended Arraival");
                 txtExportComp+=String.format(" 	%s", "isCatch?");
                 txtExportComp+=String.format("	   %s\n", "HasExam?");
-
+                
+                
                 for(int S = 0; S < currentFlight.studentsInTrip.size(); S++) {
                 	Student stu = currentFlight.studentsInTrip.get(S);
+                    comprehensiveReport+=String.format("	%d", S + 1);
+                    comprehensiveReport+=String.format("	    %d", stu.getID());
+                    comprehensiveReport+=String.format("	     %s", Time.MinutesToTime(stu.getShowupTime()));
+                    comprehensiveReport+=String.format("		%s", Time.MinutesToTime(stu.getIntendedArrivalTime()));
+                    comprehensiveReport+=String.format("			  %s", stu.isCatch());
+                    comprehensiveReport+=String.format("		 %s\n", stu.getHasExam());
+                    
                     txtExportComp+=String.format("	%d", S + 1);
                     txtExportComp+=String.format("	    %d", stu.getID());
                     txtExportComp+=String.format("	     %s", Time.MinutesToTime(stu.getShowupTime()));
@@ -580,6 +562,15 @@ public class FXMLmainController  implements Initializable{
         		
         	}
 //        		+++++++++++++++++++++++++++Bus in Flight Information+++++++++++++++++++++++++++++++++++++
+        		comprehensiveReport+=String.format("%n\t\t\t%s",minus(110));
+        		comprehensiveReport+=String.format("%n\t\t\t 				     	   	            %s","Bus Information:");
+            	comprehensiveReport+=String.format("%n\t\t\t%s%n",minus(110));
+                comprehensiveReport+=String.format("\t\t\t    %s", "BusID");
+                comprehensiveReport+=String.format("	 %s", "Moved-Distance KM");
+                comprehensiveReport+=String.format("	 %s", "FuelConsumbtion L");
+                comprehensiveReport+=String.format(" 	 %s", "Number Of Trips");
+                comprehensiveReport+=String.format("	%s\n", "Students Delivered");
+                
         		txtExportComp+=String.format("%n\t\t\t%s",minus(110));
         		txtExportComp+=String.format("%n\t\t\t 				     	   	            %s","Bus Information:");
             	txtExportComp+=String.format("%n\t\t\t%s%n",minus(110));
@@ -591,6 +582,12 @@ public class FXMLmainController  implements Initializable{
 
                 for(int B = 0; B < BusReport.get(day).size(); B++) {
                 	Bus Cbus = BusReport.get(day).get(B);
+                    comprehensiveReport+=String.format("\t\t\t	%d", Cbus.getID());
+                    comprehensiveReport+=String.format("	            %.2f", Cbus.getDistanceKm());
+                    comprehensiveReport+=String.format("				   %.2f", Cbus.getFuelConsumption());
+                    comprehensiveReport+=String.format("				  %d", Cbus.getNumberTrips());
+                    comprehensiveReport+=String.format("			 	 %d\n", Cbus.getStudentsDelivered().size());
+                    
                     txtExportComp+=String.format("\t\t\t    %d", Cbus.getID());
                     txtExportComp+=String.format("	           %.2f", Cbus.getDistanceKm());
                     txtExportComp+=String.format("	           %.2f", Cbus.getFuelConsumption());
@@ -605,8 +602,7 @@ public class FXMLmainController  implements Initializable{
         	
         }
         
-        
-        
+         
         
         
         // **************************Resources Efficiency %***************************** 
@@ -645,12 +641,12 @@ public class FXMLmainController  implements Initializable{
         summaryReportP1+=String.format("%s	 	", "Total Students not Delivered");
         summaryReportP1+=String.format("%s	 	", "Total Distance KM");
         summaryReportP1+=String.format("%s          ", "Total Fuel L");
-        summaryReportP1+=String.format("%s\n", "value Of Money%");
+        summaryReportP1+=String.format("%s\n", "Money Wasted");
         summaryReportP1+=String.format("		%d", (int)summaryP1[3]);
         summaryReportP1+=String.format("							%d", (int)summaryP1[4]);
         summaryReportP1+=String.format("				       %.2f", summaryP1[5]);
         summaryReportP1+=String.format("		          %.2f", summaryP1[6]);
-        summaryReportP1+=String.format("	                 %.2f%%", valueOfMoney);
+        summaryReportP1+=String.format("	                 %.2f1", ((summaryP1[6]*0.52)/(int)summaryP1[3]) * summaryP1[1]);
 
         
         
@@ -674,12 +670,12 @@ public class FXMLmainController  implements Initializable{
         txtExportSum+=String.format("%s	 	", "Total Students not Delivered");
         txtExportSum+=String.format("%s	 	", "Total Distance KM");
         txtExportSum+=String.format("%s          ", "Total Fuel L");
-        txtExportSum+=String.format("%s\n", "value Of Money%");
+        txtExportSum+=String.format("%s\n", "Money Wasted");
         txtExportSum+=String.format("	  %d", (int)summaryP1[3]);
         txtExportSum+=String.format("		  \t\t\t\t%d", (int)summaryP1[4]);
         txtExportSum+=String.format("		        \t%.2f", summaryP1[5]);
         txtExportSum+=String.format("		           %.2f", summaryP1[6]);
-        txtExportSum+=String.format("	            %.2f%%", valueOfMoney);
+        txtExportSum+=String.format("	            %.2f", ((summaryP1[6]*0.52)/(int)summaryP1[3]) * summaryP1[1]);
 
         
         FXMLmainController.summaryP1 = txtExportComp;
@@ -748,6 +744,8 @@ public class FXMLmainController  implements Initializable{
     }
 	//main drive of the project (main loop)
 	public static ArrayList<Object> GUI(int KAUdays, int KAUbus, int[] KAUstudent) {
+		//clear randomStudentsGeneratedForP2
+		FXMLmainController.randomStudentsGeneratedForP2.clear();
 		// report lists
 		double[] totalSummary = new double[7];
 		//Initialize number of catches to 0
@@ -823,6 +821,7 @@ public class FXMLmainController  implements Initializable{
 			//************************STUDENTS*************************
 	        //create an ordered array of random students based on showed up times
 			ArrayList<Student> students = generateRandomStudents(days, KAUstudent);
+			FXMLmainController.randomStudentsGeneratedForP2.add(students);
 			
 			//create a temp array of arrived students
 			ArrayList<Student> tempStudents = new ArrayList<>();
@@ -873,6 +872,265 @@ public class FXMLmainController  implements Initializable{
                     // 3- increment the bus pointer of the array
 					busses.dequeue();
 					busses.enqueue(bus);
+                    // 4- increment the clock 
+					Time.incrementClock();
+                    // 5- continue loading students with updated clock
+					continue;
+				}
+        		// else if there is at least one student in the bus(cap < 10):
+				else if (bus.getCapacity() < 10) {
+					// if clock meets (every 30 mins a bus should move regardless of students) && there is at least one student in the bus:
+					if (bus.getScheduledDormDeparture() == Time.clock) {
+	                    // 1- send the bus (update availability, time of arrival, time of departure, distance covered, fuel consumption, trips)
+//						System.out.println();
+						bus.sendBus(days, tempStudents, flightReport, studentsAll, flightsAll);
+	                // 3- increment the bus pointer of the array
+						busses.dequeue();
+						busses.enqueue(bus);
+                    // 4- increment the clock 
+						Time.incrementClock();
+	                // 5- continue loading students with updated clock
+						continue;
+				}
+					// else if the student pointer is null && there is at least one student in the bus
+					else if (studentPointer >= students.size()) {
+						//send the bus
+						while (true) {
+							if (bus.getScheduledDormDeparture() == Time.clock) break;
+							Time.incrementClock();	
+						}
+						bus.sendBus(days, tempStudents, flightReport, studentsAll, flightsAll);
+						break;
+					}
+			
+					}
+				
+				// if there are no students in the bus and clock meets scheduled dormDeparture:
+				noStudentsAndTimeToMove(bus, busses);
+		}//end students loop
+		//loop in the array of arrived students and print the report
+		for(int i = 0; i < tempStudents.size(); i++) {
+			Student s = tempStudents.get(i);
+//			System.out.println(s);
+		}
+		//reinitilize the array of students and busses and reset clock
+		Time.clock = realClock.getStartingHour();
+		tempStudents.clear();
+		//reinitilize pointers(bus and student)
+		studentPointer = 0;
+		int totalDeliveredStudents = 0;
+		double totalDistance = 0;
+		double totalFuelConsumption = 0;
+		for(Bus B : busses.arr) {
+			totalDeliveredStudents = totalDeliveredStudents + B.getStudentsDelivered().size();
+			totalDistance = totalDistance + B.getDistanceKm();
+			totalFuelConsumption = totalFuelConsumption + B.getFuelConsumption();
+			try {
+				busReport.get(days - 1).add((Bus)B.clone());
+			}catch(CloneNotSupportedException e) {
+				System.out.println(e.getMessage());
+			}
+		} 
+		//decrement the testDays
+		testDays--;
+		days++;
+		//new busses
+		
+		//************************BUSSES*************************
+		//send busses used for today for report list
+
+        //create a Queue of busses
+		busses = new Queue(testBusses);
+		scheduledDormDeparture = 0;
+		for(int i = 0; i < testBusses; i++) {
+			//formula for cal the schduled dorm departure
+			scheduledDormDeparture = 30*i + 30;
+			busses.enqueue(new Bus(scheduledDormDeparture, i));
+		}
+		
+		// total catches & misses
+		int catchesOfTheDay = 0;
+		for (Student S : students) {
+			if(S.isCatch) catchesOfTheDay++;
+		}
+		totalSummary[0] = totalSummary[0] + catchesOfTheDay;
+		totalSummary[1] = totalSummary[1] + (students.size() - catchesOfTheDay);
+		totalSummary[3] = totalSummary[3] + totalDeliveredStudents;
+		totalSummary[4] = totalSummary[4] + (students.size() - totalDeliveredStudents);
+		totalSummary[5] = totalSummary[5] + totalDistance;
+		totalSummary[6] = totalSummary[6] + totalFuelConsumption;
+		
+		
+		} //end days loop
+		// make the flight report accessible by other members of the class
+		FXMLmainController.flightReportP1.clear();
+		FXMLmainController.flightReportP1 = flightReport;
+		totalSummary[2] = Flight.getNumFlights();
+		ArrayList<Object> result = new ArrayList<>();
+		result.add(flightReport);
+		result.add(busReport);
+		result.add(totalSummary);
+		return result;
+		
+	}
+	
+	
+	
+	public static ArrayList<Object> GUI_Phase2(int KAUdays, int KAUbus, ArrayList<ArrayList<Student>> randomStudentsGenerated) {
+//		clear number of flights
+		Flight.setNumFlights(0);
+		// report lists
+		double[] totalSummary = new double[7];
+		//Initialize number of catches to 0
+		totalSummary[0] = 0;
+		//Initialize number of total students delivered to 0
+		totalSummary[3] = 0;
+		//Initialize number of misses to 0
+		totalSummary[1] = 0;
+		//Initialize number of total students not delivered to 0
+		totalSummary[4] = 0;
+		//Initialize number of total fuel and distance to 0
+		totalSummary[5] = 0;
+		totalSummary[6] = 0;
+		ArrayList<ArrayList<Flight>> flightReport = new ArrayList<ArrayList<Flight>>(KAUdays);
+		ArrayList<ArrayList<Bus>> busReport = new ArrayList<ArrayList<Bus>>(KAUdays);		
+		for(int i = 0; i<KAUdays; i++) {
+			flightReport.add(new ArrayList<Flight>());
+			busReport.add(new ArrayList<Bus>());
+		}
+
+		
+		
+        // create time object
+		Time realClock = new Time();
+		
+		
+        //************initilize required number of days varaible************
+		
+		int testDays;
+		//Exception handling
+		try {
+
+			testDays = KAUdays;
+		}catch(InputMismatchException e){
+			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
+			testDays = 1;
+		}catch(Exception e){
+			System.out.println("Not a valid input for the number of days. the default value is set {1 day}");
+			testDays = 1;
+		}
+		
+		
+		//************************BUSSES*************************
+        //create a Queue of busses
+		int testBusses;
+		//Exception handling
+		try {
+			testBusses = KAUbus;
+			if(testBusses <= 0) throw new BusNumberException(testBusses);
+		}catch(BusNumberException e) {
+			System.out.println(e.getMessage() + "the default value is set {2 busses}");
+
+			testBusses = 2;
+		}catch(InputMismatchException e){
+			System.out.println("Not a valid input for the number of busses. the default value is set {2 busses}");
+
+			testBusses = 2;
+		}
+		
+		Queue busses = new Queue(testBusses);
+		int scheduledDormDeparture;
+		for(int i = 0; i < testBusses; i++) {
+			//formula for cal the schduled dorm departure
+			scheduledDormDeparture = 30*i + 30;
+			busses.enqueue(new Bus(scheduledDormDeparture, i));
+		}
+		
+		//********************LOOPS(MAIN TASK)************************
+        //initillize main while loop (number of days)
+		int days = 1;
+		while(testDays > 0) {
+			
+			//************************STUDENTS*************************
+	        //create an ordered array of random students based on showed up times
+			ArrayList<Student> students = randomStudentsGenerated.get(days - 1);
+			
+			//create a temp array of arrived students
+			ArrayList<Student> tempStudents = new ArrayList<>();
+
+			//create pointer student
+			int studentPointer = 0;
+			
+			//while loop on the array of students
+			while (tempStudents.size() < students.size()) {
+				// if clock >= realClock.endingHour
+				if (Time.clock >= realClock.endingHour) break;
+				
+				//update availability after incrementing the clock
+				updateAval(testBusses, busses);
+
+				
+				//current bus & current student
+				Bus bus = busses.peek();
+				Student student = students.get(studentPointer);
+
+				//if not aval update the bus pointer to
+				// the next bus and continue back
+				if (!bus.isAvailable()) {
+					busses.dequeue();
+					busses.enqueue(bus);
+					Time.incrementClock();
+					continue;
+				}
+
+                //else if showed up = clock
+				if (student.getShowupTime() <= Time.clock) {
+                    //load to bus and increment student pointer
+					bus.loadStudent(student);
+					studentPointer++;
+				}
+				else {
+					//increment the clock                     
+					Time.incrementClock();
+				}
+				//update availability after incrementing the clock
+				updateAval(testBusses, busses);
+
+				// if capacity is full:
+				if (bus.getCapacity() == 0) {
+					//PHASE2 specific 
+		            //update the scheduled dormDeparture to the current scheduled bus departure time + 30
+					// which is (period for waiting students)
+					int currentSDD = bus.getScheduledDormDeparture();
+					int newSDD = 0;
+					int temp = 0;
+					for(int i = 1; i <= busses.size(); i++) {
+
+						
+						Bus current = busses.peek();
+						if(currentSDD == current.getScheduledDormDeparture()) {
+							newSDD = current.getScheduledDormDeparture();
+							busses.dequeue();
+							busses.enqueue(current);
+							continue;
+						}
+							temp = newSDD;
+							newSDD = current.getScheduledDormDeparture();
+							current.setScheduledDormDeparture(temp);
+							busses.dequeue();
+							busses.enqueue(current);
+					}
+					
+					
+                    // 1- send the bus (update availability, time of arrival, time of departure, distance covered, fuel consumption, trips)
+//					System.out.println();
+					
+					bus.sendBus(days, tempStudents, flightReport, studentsAll, flightsAll);
+                    // 3- increment the bus pointer of the array
+					busses.dequeue();
+					busses.enqueue(bus);
+						
+				
                     // 4- increment the clock 
 					Time.incrementClock();
                     // 5- continue loading students with updated clock

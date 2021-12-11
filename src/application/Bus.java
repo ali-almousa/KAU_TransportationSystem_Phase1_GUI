@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Date: 12/9/2021
  * This class is for creating busses with all specifications required
  * and for performing some related procedures such as loading students, 
  * sending the bus and so on.
